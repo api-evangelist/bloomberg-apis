@@ -6,10 +6,10 @@ description: >-
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
+  - Analytics
   - Financial Data
   - Market Data
   - News
-  - Analytics
   - Terminal
 url: >-
   https://raw.githubusercontent.com/api-evangelist/bloomberg-apis/refs/heads/main/apis.yml
@@ -24,10 +24,10 @@ apis:
       commodities, and currencies.
     humanURL: https://www.bloomberg.com/professional/support/api-library/
     tags:
-      - Market Data
-      - Real-time
       - Equities
       - Fixed Income
+      - Market Data
+      - Real-Time
     properties:
       - type: Documentation
         url: https://www.bloomberg.com/professional/support/api-library/
@@ -38,10 +38,10 @@ apis:
       and multimedia.
     humanURL: https://www.bloomberg.com/professional/product/news-data-feeds/
     tags:
-      - News
+      - Articles
       - Content
       - Media
-      - Articles
+      - News
     properties:
       - type: Documentation
         url: https://www.bloomberg.com/professional/product/news-data-feeds/
@@ -52,9 +52,9 @@ apis:
     humanURL: https://www.bloomberg.com/professional/products/data/data-management/data-license/
     tags:
       - Bulk Data
+      - Enterprise
       - Historical Data
       - Reference Data
-      - Enterprise
     properties:
       - type: Documentation
         url: https://www.bloomberg.com/professional/products/data/data-management/data-license/
