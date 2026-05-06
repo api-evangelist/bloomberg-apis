@@ -1,0 +1,725 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Bloomberg API (BLPAPI)
+  description: 'The Bloomberg API (BLPAPI) is the official client-side library for accessing Bloomberg market data, reference
+    data, news, and analytics services across Desktop API, Server API, and B-PIPE delivery models. > **Important — protocol
+    shape**: The native BLPAPI is **NOT** an HTTP/REST > API. It is a binary, session-oriented, message-passing API delivered
+    over > the Bloomberg Network using the BLPAPI client SDK (C, C++, Java, .NET, Python). > It uses a request/response paradigm
+    and a subscription paradigm rather than > stateless HTTP verbs. > > This OpenAPI document is a **logical mapping** of
+    the B'
+  tags:
+  - Bloomberg
+  - Apis
+  - API
+  created: '2026-05-06'
+  modified: '2026-05-06'
+capability:
+  consumes:
+  - type: http
+    namespace: bloomberg-apis
+    baseUri: blpapi+session://localhost
+    description: Bloomberg API (BLPAPI) HTTP API.
+    authentication:
+      type: apikey
+      in: header
+      name: X-BLPAPI-Session
+      value: '{{BLOOMBERG_APIS_TOKEN}}'
+    resources:
+    - name: refdata-referencedatarequest
+      path: /refdata/ReferenceDataRequest
+      operations:
+      - name: referencedatarequest
+        method: POST
+        description: Request reference data for one or more securities
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: refdata-historicaldatarequest
+      path: /refdata/HistoricalDataRequest
+      operations:
+      - name: historicaldatarequest
+        method: POST
+        description: Request end-of-day historical data over a date range
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: refdata-intradaytickrequest
+      path: /refdata/IntradayTickRequest
+      operations:
+      - name: intradaytickrequest
+        method: POST
+        description: Request tick-by-tick history for a single security
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: refdata-intradaybarrequest
+      path: /refdata/IntradayBarRequest
+      operations:
+      - name: intradaybarrequest
+        method: POST
+        description: Request intraday bar (OHLCV) history for a single security
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: refdata-portfoliodatarequest
+      path: /refdata/PortfolioDataRequest
+      operations:
+      - name: portfoliodatarequest
+        method: POST
+        description: Request portfolio positions and member data
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: refdata-beqsrequest
+      path: /refdata/BeqsRequest
+      operations:
+      - name: beqsrequest
+        method: POST
+        description: Request data for a Bloomberg Equity Screening (EQS) screen
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: mktdata-subscribe
+      path: /mktdata/subscribe
+      operations:
+      - name: marketdatasubscribe
+        method: POST
+        description: Subscribe to streaming market data for one or more securities
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: mktbar-subscribe
+      path: /mktbar/subscribe
+      operations:
+      - name: marketbarsubscribe
+        method: POST
+        description: Subscribe to streaming intraday bar data
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: mktvwap-subscribe
+      path: /mktvwap/subscribe
+      operations:
+      - name: customvwapsubscribe
+        method: POST
+        description: Subscribe to streaming Custom VWAP for an equity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: apiflds-fieldinforequest
+      path: /apiflds/FieldInfoRequest
+      operations:
+      - name: fieldinforequest
+        method: POST
+        description: Get field metadata by id (mnemonic or alpha-numeric identifier)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: apiflds-fieldsearchrequest
+      path: /apiflds/FieldSearchRequest
+      operations:
+      - name: fieldsearchrequest
+        method: POST
+        description: Full-text search Bloomberg fields by mnemonic / description
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: apiflds-categorizedfieldsearchrequest
+      path: /apiflds/CategorizedFieldSearchRequest
+      operations:
+      - name: categorizedfieldsearchrequest
+        method: POST
+        description: Search Bloomberg fields with results grouped by category tree
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: pagedata-subscribe
+      path: /pagedata/subscribe
+      operations:
+      - name: pagedatasubscribe
+        method: POST
+        description: Subscribe to a Bloomberg GPGX page
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: tasvc-studyrequest
+      path: /tasvc/StudyRequest
+      operations:
+      - name: studyrequest
+        method: POST
+        description: Request a technical analysis study (historical, intraday, or real-time)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: apiauth-authorizationrequest
+      path: /apiauth/AuthorizationRequest
+      operations:
+      - name: authorizationrequest
+        method: POST
+        description: Authorize a Bloomberg user against an IP address (Server API) or token (B-PIPE)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: apiauth-logonstatusrequest
+      path: /apiauth/LogonStatusRequest
+      operations:
+      - name: logonstatusrequest
+        method: POST
+        description: Check whether a UUID is logged into Bloomberg Anywhere at an IP
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: apiauth-userentitlementsrequest
+      path: /apiauth/UserEntitlementsRequest
+      operations:
+      - name: userentitlementsrequest
+        method: POST
+        description: List exchange entitlements for a Bloomberg user
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: apiauth-securityentitlementsrequest
+      path: /apiauth/SecurityEntitlementsRequest
+      operations:
+      - name: securityentitlementsrequest
+        method: POST
+        description: Get exchange entitlements for one or more securities
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: apiauth-authorizationtokenrequest
+      path: /apiauth/AuthorizationTokenRequest
+      operations:
+      - name: authorizationtokenrequest
+        method: POST
+        description: Request an authorization token for a Server API application (B-PIPE)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: instruments-securitylookuprequest
+      path: /instruments/SecurityLookupRequest
+      operations:
+      - name: securitylookuprequest
+        method: POST
+        description: Look up securities by free-text query
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: instruments-curvelookuprequest
+      path: /instruments/CurveLookupRequest
+      operations:
+      - name: curvelookuprequest
+        method: POST
+        description: Look up Bloomberg yield curves
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: instruments-govtlookuprequest
+      path: /instruments/GovtLookupRequest
+      operations:
+      - name: govtlookuprequest
+        method: POST
+        description: Look up government securities
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    port: 8080
+    namespace: bloomberg-apis-rest
+    description: REST adapter for Bloomberg API (BLPAPI).
+    resources:
+    - path: /refdata/ReferenceDataRequest
+      name: referencedatarequest
+      operations:
+      - method: POST
+        name: referencedatarequest
+        description: Request reference data for one or more securities
+        call: bloomberg-apis.referencedatarequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /refdata/HistoricalDataRequest
+      name: historicaldatarequest
+      operations:
+      - method: POST
+        name: historicaldatarequest
+        description: Request end-of-day historical data over a date range
+        call: bloomberg-apis.historicaldatarequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /refdata/IntradayTickRequest
+      name: intradaytickrequest
+      operations:
+      - method: POST
+        name: intradaytickrequest
+        description: Request tick-by-tick history for a single security
+        call: bloomberg-apis.intradaytickrequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /refdata/IntradayBarRequest
+      name: intradaybarrequest
+      operations:
+      - method: POST
+        name: intradaybarrequest
+        description: Request intraday bar (OHLCV) history for a single security
+        call: bloomberg-apis.intradaybarrequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /refdata/PortfolioDataRequest
+      name: portfoliodatarequest
+      operations:
+      - method: POST
+        name: portfoliodatarequest
+        description: Request portfolio positions and member data
+        call: bloomberg-apis.portfoliodatarequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /refdata/BeqsRequest
+      name: beqsrequest
+      operations:
+      - method: POST
+        name: beqsrequest
+        description: Request data for a Bloomberg Equity Screening (EQS) screen
+        call: bloomberg-apis.beqsrequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /mktdata/subscribe
+      name: marketdatasubscribe
+      operations:
+      - method: POST
+        name: marketdatasubscribe
+        description: Subscribe to streaming market data for one or more securities
+        call: bloomberg-apis.marketdatasubscribe
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /mktbar/subscribe
+      name: marketbarsubscribe
+      operations:
+      - method: POST
+        name: marketbarsubscribe
+        description: Subscribe to streaming intraday bar data
+        call: bloomberg-apis.marketbarsubscribe
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /mktvwap/subscribe
+      name: customvwapsubscribe
+      operations:
+      - method: POST
+        name: customvwapsubscribe
+        description: Subscribe to streaming Custom VWAP for an equity
+        call: bloomberg-apis.customvwapsubscribe
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /apiflds/FieldInfoRequest
+      name: fieldinforequest
+      operations:
+      - method: POST
+        name: fieldinforequest
+        description: Get field metadata by id (mnemonic or alpha-numeric identifier)
+        call: bloomberg-apis.fieldinforequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /apiflds/FieldSearchRequest
+      name: fieldsearchrequest
+      operations:
+      - method: POST
+        name: fieldsearchrequest
+        description: Full-text search Bloomberg fields by mnemonic / description
+        call: bloomberg-apis.fieldsearchrequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /apiflds/CategorizedFieldSearchRequest
+      name: categorizedfieldsearchrequest
+      operations:
+      - method: POST
+        name: categorizedfieldsearchrequest
+        description: Search Bloomberg fields with results grouped by category tree
+        call: bloomberg-apis.categorizedfieldsearchrequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /pagedata/subscribe
+      name: pagedatasubscribe
+      operations:
+      - method: POST
+        name: pagedatasubscribe
+        description: Subscribe to a Bloomberg GPGX page
+        call: bloomberg-apis.pagedatasubscribe
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /tasvc/StudyRequest
+      name: studyrequest
+      operations:
+      - method: POST
+        name: studyrequest
+        description: Request a technical analysis study (historical, intraday, or real-time)
+        call: bloomberg-apis.studyrequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /apiauth/AuthorizationRequest
+      name: authorizationrequest
+      operations:
+      - method: POST
+        name: authorizationrequest
+        description: Authorize a Bloomberg user against an IP address (Server API) or token (B-PIPE)
+        call: bloomberg-apis.authorizationrequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /apiauth/LogonStatusRequest
+      name: logonstatusrequest
+      operations:
+      - method: POST
+        name: logonstatusrequest
+        description: Check whether a UUID is logged into Bloomberg Anywhere at an IP
+        call: bloomberg-apis.logonstatusrequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /apiauth/UserEntitlementsRequest
+      name: userentitlementsrequest
+      operations:
+      - method: POST
+        name: userentitlementsrequest
+        description: List exchange entitlements for a Bloomberg user
+        call: bloomberg-apis.userentitlementsrequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /apiauth/SecurityEntitlementsRequest
+      name: securityentitlementsrequest
+      operations:
+      - method: POST
+        name: securityentitlementsrequest
+        description: Get exchange entitlements for one or more securities
+        call: bloomberg-apis.securityentitlementsrequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /apiauth/AuthorizationTokenRequest
+      name: authorizationtokenrequest
+      operations:
+      - method: POST
+        name: authorizationtokenrequest
+        description: Request an authorization token for a Server API application (B-PIPE)
+        call: bloomberg-apis.authorizationtokenrequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /instruments/SecurityLookupRequest
+      name: securitylookuprequest
+      operations:
+      - method: POST
+        name: securitylookuprequest
+        description: Look up securities by free-text query
+        call: bloomberg-apis.securitylookuprequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /instruments/CurveLookupRequest
+      name: curvelookuprequest
+      operations:
+      - method: POST
+        name: curvelookuprequest
+        description: Look up Bloomberg yield curves
+        call: bloomberg-apis.curvelookuprequest
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /instruments/GovtLookupRequest
+      name: govtlookuprequest
+      operations:
+      - method: POST
+        name: govtlookuprequest
+        description: Look up government securities
+        call: bloomberg-apis.govtlookuprequest
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: bloomberg-apis-mcp
+    transport: http
+    description: MCP adapter for Bloomberg API (BLPAPI) for AI agent use.
+    tools:
+    - name: referencedatarequest
+      description: Request reference data for one or more securities
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.referencedatarequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: historicaldatarequest
+      description: Request end-of-day historical data over a date range
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.historicaldatarequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: intradaytickrequest
+      description: Request tick-by-tick history for a single security
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.intradaytickrequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: intradaybarrequest
+      description: Request intraday bar (OHLCV) history for a single security
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.intradaybarrequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: portfoliodatarequest
+      description: Request portfolio positions and member data
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.portfoliodatarequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: beqsrequest
+      description: Request data for a Bloomberg Equity Screening (EQS) screen
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.beqsrequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: marketdatasubscribe
+      description: Subscribe to streaming market data for one or more securities
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.marketdatasubscribe
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: marketbarsubscribe
+      description: Subscribe to streaming intraday bar data
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.marketbarsubscribe
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: customvwapsubscribe
+      description: Subscribe to streaming Custom VWAP for an equity
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.customvwapsubscribe
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: fieldinforequest
+      description: Get field metadata by id (mnemonic or alpha-numeric identifier)
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.fieldinforequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: fieldsearchrequest
+      description: Full-text search Bloomberg fields by mnemonic / description
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.fieldsearchrequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: categorizedfieldsearchrequest
+      description: Search Bloomberg fields with results grouped by category tree
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.categorizedfieldsearchrequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: pagedatasubscribe
+      description: Subscribe to a Bloomberg GPGX page
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.pagedatasubscribe
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: studyrequest
+      description: Request a technical analysis study (historical, intraday, or real-time)
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.studyrequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: authorizationrequest
+      description: Authorize a Bloomberg user against an IP address (Server API) or token (B-PIPE)
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.authorizationrequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: logonstatusrequest
+      description: Check whether a UUID is logged into Bloomberg Anywhere at an IP
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.logonstatusrequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: userentitlementsrequest
+      description: List exchange entitlements for a Bloomberg user
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.userentitlementsrequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: securityentitlementsrequest
+      description: Get exchange entitlements for one or more securities
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.securityentitlementsrequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: authorizationtokenrequest
+      description: Request an authorization token for a Server API application (B-PIPE)
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.authorizationtokenrequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: securitylookuprequest
+      description: Look up securities by free-text query
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.securitylookuprequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: curvelookuprequest
+      description: Look up Bloomberg yield curves
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.curvelookuprequest
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: govtlookuprequest
+      description: Look up government securities
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-apis.govtlookuprequest
+      outputParameters:
+      - type: object
+        mapping: $.
+binds:
+- namespace: env
+  keys:
+    BLOOMBERG_APIS_TOKEN: BLOOMBERG_APIS_TOKEN
