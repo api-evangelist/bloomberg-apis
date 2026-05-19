@@ -1,0 +1,164 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Bloomberg API (BLPAPI) — apiflds
+  description: 'Bloomberg API (BLPAPI) — apiflds. 3 operations. Lead operation: Search Bloomberg fields with results grouped
+    by category tree. Self-contained Naftiko capability covering one Bloomberg Apis business surface.'
+  tags:
+  - Bloomberg Apis
+  - apiflds
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BLOOMBERG_APIS_API_KEY: BLOOMBERG_APIS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: bloomberg-blpapi-apiflds
+    baseUri: ''
+    description: Bloomberg API (BLPAPI) — apiflds business capability. Self-contained, no shared references.
+    resources:
+    - name: apiflds-CategorizedFieldSearchRequest
+      path: /apiflds/CategorizedFieldSearchRequest
+      operations:
+      - name: categorizedfieldsearchrequest
+        method: POST
+        description: Search Bloomberg fields with results grouped by category tree
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: apiflds-FieldInfoRequest
+      path: /apiflds/FieldInfoRequest
+      operations:
+      - name: fieldinforequest
+        method: POST
+        description: Get field metadata by id (mnemonic or alpha-numeric identifier)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: apiflds-FieldSearchRequest
+      path: /apiflds/FieldSearchRequest
+      operations:
+      - name: fieldsearchrequest
+        method: POST
+        description: Full-text search Bloomberg fields by mnemonic / description
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.BLOOMBERG_APIS_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: bloomberg-blpapi-apiflds-rest
+    port: 8080
+    description: REST adapter for Bloomberg API (BLPAPI) — apiflds. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/apiflds/categorizedfieldsearchrequest
+      name: apiflds-categorizedfieldsearchrequest
+      description: REST surface for apiflds-CategorizedFieldSearchRequest.
+      operations:
+      - method: POST
+        name: categorizedfieldsearchrequest
+        description: Search Bloomberg fields with results grouped by category tree
+        call: bloomberg-blpapi-apiflds.categorizedfieldsearchrequest
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/apiflds/fieldinforequest
+      name: apiflds-fieldinforequest
+      description: REST surface for apiflds-FieldInfoRequest.
+      operations:
+      - method: POST
+        name: fieldinforequest
+        description: Get field metadata by id (mnemonic or alpha-numeric identifier)
+        call: bloomberg-blpapi-apiflds.fieldinforequest
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/apiflds/fieldsearchrequest
+      name: apiflds-fieldsearchrequest
+      description: REST surface for apiflds-FieldSearchRequest.
+      operations:
+      - method: POST
+        name: fieldsearchrequest
+        description: Full-text search Bloomberg fields by mnemonic / description
+        call: bloomberg-blpapi-apiflds.fieldsearchrequest
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: bloomberg-blpapi-apiflds-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Bloomberg API (BLPAPI) — apiflds. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: search-bloomberg-fields-results-grouped
+      description: Search Bloomberg fields with results grouped by category tree
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: bloomberg-blpapi-apiflds.categorizedfieldsearchrequest
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-field-metadata-id-mnemonic
+      description: Get field metadata by id (mnemonic or alpha-numeric identifier)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: bloomberg-blpapi-apiflds.fieldinforequest
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: full-text-search-bloomberg-fields
+      description: Full-text search Bloomberg fields by mnemonic / description
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: bloomberg-blpapi-apiflds.fieldsearchrequest
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

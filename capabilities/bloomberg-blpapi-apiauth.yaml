@@ -1,0 +1,248 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Bloomberg API (BLPAPI) — apiauth
+  description: 'Bloomberg API (BLPAPI) — apiauth. 5 operations. Lead operation: Authorize a Bloomberg user against an IP address
+    (Server API) or token (B-PIPE). Self-contained Naftiko capability covering one Bloomberg Apis business surface.'
+  tags:
+  - Bloomberg Apis
+  - apiauth
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BLOOMBERG_APIS_API_KEY: BLOOMBERG_APIS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: bloomberg-blpapi-apiauth
+    baseUri: ''
+    description: Bloomberg API (BLPAPI) — apiauth business capability. Self-contained, no shared references.
+    resources:
+    - name: apiauth-AuthorizationRequest
+      path: /apiauth/AuthorizationRequest
+      operations:
+      - name: authorizationrequest
+        method: POST
+        description: Authorize a Bloomberg user against an IP address (Server API) or token (B-PIPE)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: apiauth-AuthorizationTokenRequest
+      path: /apiauth/AuthorizationTokenRequest
+      operations:
+      - name: authorizationtokenrequest
+        method: POST
+        description: Request an authorization token for a Server API application (B-PIPE)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: apiauth-LogonStatusRequest
+      path: /apiauth/LogonStatusRequest
+      operations:
+      - name: logonstatusrequest
+        method: POST
+        description: Check whether a UUID is logged into Bloomberg Anywhere at an IP
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: apiauth-SecurityEntitlementsRequest
+      path: /apiauth/SecurityEntitlementsRequest
+      operations:
+      - name: securityentitlementsrequest
+        method: POST
+        description: Get exchange entitlements for one or more securities
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: apiauth-UserEntitlementsRequest
+      path: /apiauth/UserEntitlementsRequest
+      operations:
+      - name: userentitlementsrequest
+        method: POST
+        description: List exchange entitlements for a Bloomberg user
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.BLOOMBERG_APIS_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: bloomberg-blpapi-apiauth-rest
+    port: 8080
+    description: REST adapter for Bloomberg API (BLPAPI) — apiauth. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/apiauth/authorizationrequest
+      name: apiauth-authorizationrequest
+      description: REST surface for apiauth-AuthorizationRequest.
+      operations:
+      - method: POST
+        name: authorizationrequest
+        description: Authorize a Bloomberg user against an IP address (Server API) or token (B-PIPE)
+        call: bloomberg-blpapi-apiauth.authorizationrequest
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/apiauth/authorizationtokenrequest
+      name: apiauth-authorizationtokenrequest
+      description: REST surface for apiauth-AuthorizationTokenRequest.
+      operations:
+      - method: POST
+        name: authorizationtokenrequest
+        description: Request an authorization token for a Server API application (B-PIPE)
+        call: bloomberg-blpapi-apiauth.authorizationtokenrequest
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/apiauth/logonstatusrequest
+      name: apiauth-logonstatusrequest
+      description: REST surface for apiauth-LogonStatusRequest.
+      operations:
+      - method: POST
+        name: logonstatusrequest
+        description: Check whether a UUID is logged into Bloomberg Anywhere at an IP
+        call: bloomberg-blpapi-apiauth.logonstatusrequest
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/apiauth/securityentitlementsrequest
+      name: apiauth-securityentitlementsrequest
+      description: REST surface for apiauth-SecurityEntitlementsRequest.
+      operations:
+      - method: POST
+        name: securityentitlementsrequest
+        description: Get exchange entitlements for one or more securities
+        call: bloomberg-blpapi-apiauth.securityentitlementsrequest
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/apiauth/userentitlementsrequest
+      name: apiauth-userentitlementsrequest
+      description: REST surface for apiauth-UserEntitlementsRequest.
+      operations:
+      - method: POST
+        name: userentitlementsrequest
+        description: List exchange entitlements for a Bloomberg user
+        call: bloomberg-blpapi-apiauth.userentitlementsrequest
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: bloomberg-blpapi-apiauth-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Bloomberg API (BLPAPI) — apiauth. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: authorize-bloomberg-user-against-ip
+      description: Authorize a Bloomberg user against an IP address (Server API) or token (B-PIPE)
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-blpapi-apiauth.authorizationrequest
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: request-authorization-token-server-api
+      description: Request an authorization token for a Server API application (B-PIPE)
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-blpapi-apiauth.authorizationtokenrequest
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: check-whether-uuid-is-logged
+      description: Check whether a UUID is logged into Bloomberg Anywhere at an IP
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: bloomberg-blpapi-apiauth.logonstatusrequest
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-exchange-entitlements-one-more
+      description: Get exchange entitlements for one or more securities
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: bloomberg-blpapi-apiauth.securityentitlementsrequest
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-exchange-entitlements-bloomberg-user
+      description: List exchange entitlements for a Bloomberg user
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: bloomberg-blpapi-apiauth.userentitlementsrequest
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

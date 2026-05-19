@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Bloomberg API (BLPAPI) — mktvwap
+  description: 'Bloomberg API (BLPAPI) — mktvwap. 1 operations. Lead operation: Subscribe to streaming Custom VWAP for an
+    equity. Self-contained Naftiko capability covering one Bloomberg Apis business surface.'
+  tags:
+  - Bloomberg Apis
+  - mktvwap
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    BLOOMBERG_APIS_API_KEY: BLOOMBERG_APIS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: bloomberg-blpapi-mktvwap
+    baseUri: ''
+    description: Bloomberg API (BLPAPI) — mktvwap business capability. Self-contained, no shared references.
+    resources:
+    - name: mktvwap-subscribe
+      path: /mktvwap/subscribe
+      operations:
+      - name: customvwapsubscribe
+        method: POST
+        description: Subscribe to streaming Custom VWAP for an equity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.BLOOMBERG_APIS_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: bloomberg-blpapi-mktvwap-rest
+    port: 8080
+    description: REST adapter for Bloomberg API (BLPAPI) — mktvwap. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/mktvwap/subscribe
+      name: mktvwap-subscribe
+      description: REST surface for mktvwap-subscribe.
+      operations:
+      - method: POST
+        name: customvwapsubscribe
+        description: Subscribe to streaming Custom VWAP for an equity
+        call: bloomberg-blpapi-mktvwap.customvwapsubscribe
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: bloomberg-blpapi-mktvwap-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Bloomberg API (BLPAPI) — mktvwap. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: subscribe-streaming-custom-vwap-equity
+      description: Subscribe to streaming Custom VWAP for an equity
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: bloomberg-blpapi-mktvwap.customvwapsubscribe
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
