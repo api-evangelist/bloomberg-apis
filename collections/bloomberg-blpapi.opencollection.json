@@ -1,0 +1,332 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bloomberg API (BLPAPI)",
+    "version": "2.54"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-BLPAPI-Session",
+      "value": "{{X-BLPAPI-Session}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "refdata",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request reference data for one or more securities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/refdata/ReferenceDataRequest"
+          },
+          "docs": "Returns a snapshot of current values for a set of (security, field) pairs.\nMultiple securities and fields per request. Supports overrides,\nentitlements echo, formatted-value mode, UTC timestamps, and forced delay.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `ReferenceDataRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Request end-of-day historical data over a date range",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/refdata/HistoricalDataRequest"
+          },
+          "docs": "Retrieves end-of-day data for one or more (security, field) pairs over a\ndefined period. Supports daily, weekly, monthly, quarterly, semi-annual,\nand annual periodicity. Adjustments for splits, dividends, abnormal cash\nevents, and DPDF settings are configurable.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `HistoricalDataRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Request tick-by-tick history for a single security",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/refdata/IntradayTickRequest"
+          },
+          "docs": "Returns each tick (TRADE, BID, ASK, BID_BEST, ASK_BEST, MID_PRICE,\nAT_TRADE, BEST_BID, BEST_ASK) over a defined UTC time range for one\nsecurity. Bloomberg keeps 140 days of intraday history.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `IntradayTickRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Request intraday bar (OHLCV) history for a single security",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/refdata/IntradayBarRequest"
+          },
+          "docs": "Returns aggregated bars (OPEN/HIGH/LOW/CLOSE/VOLUME/NUMBER_OF_TICKS)\nover a defined UTC time range for a single security and event type.\nBar interval can be 1 to 1440 minutes.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `IntradayBarRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Request portfolio positions and member data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/refdata/PortfolioDataRequest"
+          },
+          "docs": "Retrieves change information and portfolio positions for a portfolio\nidentified by Portfolio ID (from `PRTU<GO>`). Supports historical\nretrieval via the REFERENCE_DATE override.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `PortfolioDataRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Request data for a Bloomberg Equity Screening (EQS) screen",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/refdata/BeqsRequest"
+          },
+          "docs": "Returns the security data for a screen created using `EQS <GO>` on\nthe Bloomberg Professional service. Supports private/global screens,\nlanguage selection, group filtering, and PiTDate historical access.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `BeqsRequest`\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "mktdata",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Subscribe to streaming market data for one or more securities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/mktdata/subscribe"
+          },
+          "docs": "Establishes a streaming subscription. The initial SUMMARY message\ncontains all subscribed fields; subsequent updates contain only fields\nwhose values changed.\n\n**BLPAPI service**: `//blp/mktdata`\n**Paradigm**: Subscription (delivers SUBSCRIPTION_DATA / SUBSCRIPTION_STATUS events)\n\n> Subscriptions are inherently asynchronous and stateful — this HTTP\n> shape only captures subscription initiation. The real BLPAPI client\n> attaches an EventQueue or callback that receives updates until the\n> subscrip"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "mktbar",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Subscribe to streaming intraday bar data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/mktbar/subscribe"
+          },
+          "docs": "Establishes a subscription that delivers bucketized OHLCV bars at a\nconfigurable interval. Topic format:\n`//blp/mktbar/SYMBOLOGY/SECURITY?START_TIME=st&END_TIME=et&BAR_SIZE=bz`\n\nDelivers MarketBarStart, MarketBarUpdate, MarketBarIntervalEnd,\nand MarketBarEnd events.\n\n**BLPAPI service**: `//blp/mktbar`\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "mktvwap",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Subscribe to streaming Custom VWAP for an equity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/mktvwap/subscribe"
+          },
+          "docs": "Streams Custom Volume Weighted Average Price values with a series of\nVWAP-specific overrides (start/end times, condition codes, lot sizes).\nTopic format:\n`//blp/mktvwap/ticker/SECURITY?VWAP_START_TIME=st&VWAP_END_TIME=et`\n\n**BLPAPI service**: `//blp/mktvwap`\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "apiflds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get field metadata by id (mnemonic or alpha-numeric identifier)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiflds/FieldInfoRequest"
+          },
+          "docs": "Returns descriptive information for one or more Bloomberg fields\nspecified by mnemonic (e.g. `LAST_PRICE`) or alpha-numeric ID\n(e.g. `pq005`). Optionally returns documentation.\n\n**BLPAPI service**: `//blp/apiflds`\n**Operation**: `FieldInfoRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Full-text search Bloomberg fields by mnemonic / description",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiflds/FieldSearchRequest"
+          },
+          "docs": "Returns fields matching a search string, optionally filtered by\ncategory, product type, and field type (Static / Real Time).\n\n**BLPAPI service**: `//blp/apiflds`\n**Operation**: `FieldSearchRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Search Bloomberg fields with results grouped by category tree",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiflds/CategorizedFieldSearchRequest"
+          },
+          "docs": "Returns fields matching a search string, with results arranged into\nthe Bloomberg field-category tree.\n\n**BLPAPI service**: `//blp/apiflds`\n**Operation**: `CategorizedFieldSearchRequest`\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "pagedata",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Subscribe to a Bloomberg GPGX page",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/pagedata/subscribe"
+          },
+          "docs": "Subscribes to a GPGX page topic in the form `GPGX/MONITOR/PAGE` (e.g.\n`0708/012/0001`). Specifies which rows on the page to subscribe to.\nReceives PageUpdate (full page) and RowUpdate (partial) events.\n\n**BLPAPI service**: `//blp/pagedata`\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "tasvc",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request a technical analysis study (historical, intraday, or real-time)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/tasvc/StudyRequest"
+          },
+          "docs": "Runs a Bloomberg technical analysis study (e.g. SMA, EMA, RSI, MACD,\nBollinger Bands, Stochastics) and returns the computed series.\nThree data types: HistoricalEndOfDay, Intraday, and Real-time.\n\n**BLPAPI service**: `//blp/tasvc`\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "apiauth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Authorize a Bloomberg user against an IP address (Server API) or token (B-PIPE)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiauth/AuthorizationRequest"
+          },
+          "docs": "Checks whether a given Bloomberg Anywhere user (UUID) is logged into\nBloomberg Professional at the specified location, and returns an\nIdentity object that subsequent requests can use to assert\npermissioning.\n\n**BLPAPI service**: `//blp/apiauth`\n**Operation**: `AuthorizationRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Check whether a UUID is logged into Bloomberg Anywhere at an IP",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiauth/LogonStatusRequest"
+          },
+          "docs": "Check whether a UUID is logged into Bloomberg Anywhere at an IP"
+        },
+        {
+          "info": {
+            "name": "List exchange entitlements for a Bloomberg user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiauth/UserEntitlementsRequest"
+          },
+          "docs": "List exchange entitlements for a Bloomberg user"
+        },
+        {
+          "info": {
+            "name": "Get exchange entitlements for one or more securities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiauth/SecurityEntitlementsRequest"
+          },
+          "docs": "Get exchange entitlements for one or more securities"
+        },
+        {
+          "info": {
+            "name": "Request an authorization token for a Server API application (B-PIPE)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiauth/AuthorizationTokenRequest"
+          },
+          "docs": "Used by B-PIPE applications to acquire a one-time token for\nauthentication. The token is then submitted via AuthorizationRequest.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "instruments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Look up securities by free-text query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/instruments/SecurityLookupRequest"
+          },
+          "docs": "Searches Bloomberg's instrument universe by ticker / name. Returns\ncandidate securities with their full Bloomberg identifiers.\n\n**BLPAPI service**: `//blp/instruments`\n"
+        },
+        {
+          "info": {
+            "name": "Look up Bloomberg yield curves",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/instruments/CurveLookupRequest"
+          },
+          "docs": "Look up Bloomberg yield curves"
+        },
+        {
+          "info": {
+            "name": "Look up government securities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/instruments/GovtLookupRequest"
+          },
+          "docs": "Look up government securities"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
