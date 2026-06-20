@@ -4,7 +4,7 @@ description: >-
   Collection of Bloomberg's financial data and news APIs for accessing market data, news content, data licensing, and
   enterprise connectivity.
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
   - Analytics
   - Financial Data
