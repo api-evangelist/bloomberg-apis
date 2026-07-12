@@ -1,0 +1,42 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/bloomberg-blpapi-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: desktopAPI
+  type: apiKey
+  in: header
+  parameter: X-BLPAPI-Session
+  description: |-
+    Desktop API authorization is handled by the local Bloomberg Professional
+    terminal. Applications open a session against `localhost:8194` and the
+    terminal context is the authorization. No token is presented over the wire.
+  sources:
+  - openapi/bloomberg-blpapi-openapi.yml
+- name: serverAPI
+  type: apiKey
+  in: header
+  parameter: X-BLPAPI-ASID
+  description: |-
+    Server API authorization is by ASID and registered IP address.
+    The application's IP must be entitled in the Bloomberg Anywhere
+    permissioning system; an `AuthorizationRequest` with `ipAddress`
+    validates the user's identity at that location.
+  sources:
+  - openapi/bloomberg-blpapi-openapi.yml
+- name: bpipeToken
+  type: http
+  scheme: bearer
+  bearerFormat: BLPAPI-Token
+  description: |-
+    B-PIPE applications acquire a token via the
+    `AuthorizationTokenRequest` operation, then submit the token in an
+    `AuthorizationRequest` to obtain an Identity object. The Identity
+    object is then attached to subsequent service requests.
+  sources:
+  - openapi/bloomberg-blpapi-openapi.yml
