@@ -53,6 +53,8 @@ apis:
       - type: Documentation
         url: https://www.bloomberg.com/professional/products/data/data-management/data-license/
 common:
+  - type: AgenticAccess
+    url: agentic-access/bloomberg-apis-agentic-access.yml
   - type: VulnerabilityDisclosure
     url: security/bloomberg-apis-vulnerability-disclosure.yml
   - type: DomainSecurity
