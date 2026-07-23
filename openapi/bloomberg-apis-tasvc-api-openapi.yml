@@ -1,0 +1,372 @@
+openapi: 3.1.0
+info:
+  title: Bloomberg API (BLPAPI) apiauth tasvc API
+  version: '2.54'
+  summary: Logical OpenAPI representation of the Bloomberg API (BLPAPI) v3.x
+  description: 'The Bloomberg API (BLPAPI) is the official client-side library for accessing
+
+    Bloomberg market data, reference data, news, and analytics services across
+
+    Desktop API, Server API, and B-PIPE delivery models.
+
+
+    > **Important — protocol shape**: The native BLPAPI is **NOT** an HTTP/REST
+
+    > API. It is a binary, session-oriented, message-passing API delivered over
+
+    > the Bloomberg Network using the BLPAPI client SDK (C, C++, Java, .NET, Python).
+
+    > It uses a request/response paradigm and a subscription paradigm rather than
+
+    > stateless HTTP verbs.
+
+    >
+
+    > This OpenAPI document is a **logical mapping** of the BLPAPI service and
+
+    > schema model into HTTP-shaped operations so that:
+
+    >
+
+    >   - The request and response message shapes for each Bloomberg service
+
+    >     can be discovered, indexed, and reasoned about by tooling that speaks OpenAPI.
+
+    >   - Agents and code-generators can derive typed client wrappers around the
+
+    >     official BLPAPI SDK.
+
+    >   - The Bloomberg services and their operations become discoverable in
+
+    >     APIs.json indexes alongside REST APIs.
+
+    >
+
+    > **It is not a runnable HTTP gateway**. Calls described here must be
+
+    > translated into BLPAPI SDK requests against a Bloomberg session.
+
+    >
+
+    > For Bloomberg''s REST/HTTP products (Bloomberg Data License REST API,
+
+    > Bloomberg HAPI, Enterprise Data Catalog) refer to those products'' own
+
+    > developer portals — they are separate from BLPAPI.
+
+
+    ## Services
+
+
+    The BLPAPI exposes services at well-known service names:
+
+
+    - `//blp/refdata` — Reference Data Service (request/response)
+
+    - `//blp/mktdata` — Market Data Service (subscription)
+
+    - `//blp/mktvwap` — Custom VWAP Service (subscription)
+
+    - `//blp/mktbar` — Market Bar Subscription Service (subscription)
+
+    - `//blp/apiflds` — API Field Information Service (request/response)
+
+    - `//blp/pagedata` — Page Data Service (subscription)
+
+    - `//blp/tasvc` — Technical Analysis Service (request/response)
+
+    - `//blp/apiauth` — API Authorization Service (request/response)
+
+    - `//blp/instruments` — Instruments Service (request/response)
+
+
+    B-PIPE-only services (`//blp/mktdepthdata`, `//blp/mktlist`, `//blp/srcref`)
+
+    are documented in the BLPAPI Developer''s Guide section 9 and not modeled here.
+
+
+    ## Identifier formats
+
+
+    Securities follow the format `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]`
+
+    with optional Yellow Key (Govt, Corp, Mtge, M-Mkt, Muni, Pfd, Equity, Comdty,
+
+    Index, Curncy, Client). The default Topic Prefix is `ticker`. Other prefixes
+
+    include `cusip`, `isin`, `sedol1`, `sedol2`, `bbgid`, `buid`, `wpk`, `sicovam`,
+
+    `common`, `bsid`, `svm`, `cins`, `cats`.
+
+
+    Examples: `IBM US Equity`, `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`,
+
+    `GBPUSD BAAM Curncy`.
+
+
+    ## Auth and Permissioning
+
+
+    BLPAPI uses Entitlement IDs (EIDs), the `//blp/apiauth` service, and Identity
+
+    Objects to gate access to data. Three deployment-specific authorization models
+
+    apply:
+
+
+    - **Server API** — IP-based authorization
+
+    - **B-PIPE** — Token-based authorization with separate authentication step
+
+    - **Desktop API** — User context derived from the Bloomberg Professional terminal
+
+
+    See section 6 of the Developer''s Guide for details.
+
+    '
+  contact:
+    name: Bloomberg Production Support
+    url: https://www.bloomberg.com/professional/support/
+  license:
+    name: Permissive (Bloomberg sample license terms)
+  termsOfService: https://www.bloomberg.com/professional/support/api-library/
+servers:
+- url: blpapi+session://{session}
+  description: 'Logical BLPAPI session endpoint. In production, applications open a
+
+    `Session` against `Session.Options` configured for Desktop API
+
+    (`localhost:8194`), Server API (`<server-host>:8194` with ASID
+
+    authentication), or B-PIPE (multiple BPIPE hosts with token authentication).
+
+    '
+  variables:
+    session:
+      default: localhost
+      description: Session identifier — Desktop, Server API ASID, or B-PIPE BPID
+security:
+- desktopAPI: []
+- serverAPI: []
+- bpipeToken: []
+tags:
+- name: tasvc
+  description: Technical Analysis Service — historical, intraday, and real-time studies
+paths:
+  /tasvc/StudyRequest:
+    post:
+      operationId: studyRequest
+      tags:
+      - tasvc
+      summary: Request a technical analysis study (historical, intraday, or real-time)
+      description: 'Runs a Bloomberg technical analysis study (e.g. SMA, EMA, RSI, MACD,
+
+        Bollinger Bands, Stochastics) and returns the computed series.
+
+        Three data types: HistoricalEndOfDay, Intraday, and Real-time.
+
+
+        **BLPAPI service**: `//blp/tasvc`
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/StudyRequest'
+      responses:
+        '200':
+          description: Study response with computed series
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/StudyResponse'
+components:
+  schemas:
+    Security:
+      type: string
+      description: 'Bloomberg security identifier in the form
+
+        `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]` with optional Yellow Key.
+
+        Default Topic Prefix is `ticker`. Examples: `IBM US Equity`,
+
+        `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`.
+
+        '
+      examples:
+      - IBM US Equity
+      - VOD LN Equity
+      - /cusip/912828GM6@BGN
+      - MSFT@ETPX US Equity
+      - GBPUSD BAAM Curncy
+    StudyRequest:
+      type: object
+      required:
+      - priceSource
+      - studyAttributes
+      properties:
+        priceSource:
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/HistoricalPriceSource'
+          - $ref: '#/components/schemas/IntradayPriceSource'
+          - $ref: '#/components/schemas/RealtimePriceSource'
+        studyAttributes:
+          type: object
+          description: 'Study-specific parameters (e.g. for SMA: period; for MACD: fastEMA,
+
+            slowEMA, signalEMA; for Bollinger: period, stdDev). Refer to the
+
+            BLPAPI Developer''s Guide for the full set per study.
+
+            '
+          additionalProperties: true
+    RealtimePriceSource:
+      type: object
+      properties:
+        sourceType:
+          type: string
+          const: RealtimePriceSource
+        security:
+          $ref: '#/components/schemas/Security'
+    IntradayPriceSource:
+      type: object
+      properties:
+        sourceType:
+          type: string
+          const: IntradayPriceSource
+        security:
+          $ref: '#/components/schemas/Security'
+        eventType:
+          type: string
+          enum:
+          - TRADE
+          - BID
+          - ASK
+        startDateTime:
+          type: string
+          format: date-time
+        endDateTime:
+          type: string
+          format: date-time
+        interval:
+          type: integer
+          minimum: 1
+          maximum: 1440
+    HistoricalPriceSource:
+      type: object
+      properties:
+        sourceType:
+          type: string
+          const: HistoricalPriceSource
+        security:
+          $ref: '#/components/schemas/Security'
+        priceField:
+          type: string
+          enum:
+          - PX_LAST
+          - PX_OPEN
+          - PX_HIGH
+          - PX_LOW
+          - PX_VOLUME
+        startDate:
+          type: string
+          example: '20100101'
+        endDate:
+          type: string
+        periodicitySelection:
+          type: string
+          enum:
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+          - QUARTERLY
+          - SEMI_ANNUALLY
+          - YEARLY
+    StudyResponse:
+      type: object
+      properties:
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
+        studyData:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date-time
+              value:
+                type: number
+    ErrorInfo:
+      type: object
+      description: Standard error envelope used in BLPAPI responses.
+      required:
+      - source
+      - code
+      - category
+      - message
+      properties:
+        source:
+          type: string
+          description: Bloomberg internal error source (e.g. `bbdbl1.r1.kgw`).
+        code:
+          type: integer
+          description: Bloomberg internal error code.
+        category:
+          type: string
+          description: General classification of the failure.
+          examples:
+          - BAD_SEC
+          - BAD_FLD
+          - INVALID_REQUEST
+          - NO_AUTH
+        message:
+          type: string
+          description: Human-readable description of the failure.
+        subcategory:
+          type: string
+          description: (Optional) more specific classification of the failure.
+  securitySchemes:
+    desktopAPI:
+      type: apiKey
+      in: header
+      name: X-BLPAPI-Session
+      description: 'Desktop API authorization is handled by the local Bloomberg Professional
+
+        terminal. Applications open a session against `localhost:8194` and the
+
+        terminal context is the authorization. No token is presented over the wire.
+
+        '
+    serverAPI:
+      type: apiKey
+      in: header
+      name: X-BLPAPI-ASID
+      description: 'Server API authorization is by ASID and registered IP address.
+
+        The application''s IP must be entitled in the Bloomberg Anywhere
+
+        permissioning system; an `AuthorizationRequest` with `ipAddress`
+
+        validates the user''s identity at that location.
+
+        '
+    bpipeToken:
+      type: http
+      scheme: bearer
+      bearerFormat: BLPAPI-Token
+      description: 'B-PIPE applications acquire a token via the
+
+        `AuthorizationTokenRequest` operation, then submit the token in an
+
+        `AuthorizationRequest` to obtain an Identity object. The Identity
+
+        object is then attached to subsequent service requests.
+
+        '
+externalDocs:
+  description: Bloomberg API Developer's Guide v2.54 (June 30, 2014)
+  url: https://www.bloomberg.com/professional/support/api-library/
