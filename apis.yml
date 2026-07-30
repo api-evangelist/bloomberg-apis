@@ -4,7 +4,20 @@ description: >-
   Collection of Bloomberg's financial data and news APIs for accessing market data, news content, data licensing, and
   enterprise connectivity.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/bloomberg-apis.png
 tags:
   - Analytics
   - Financial Data
@@ -16,42 +29,124 @@ created: '2024-01-01'
 modified: '2026-05-19'
 specificationVersion: '0.19'
 apis:
-  - aid: bloomberg-apis:bloomberg-market-data-feed
-    name: Bloomberg Market Data Feed
-    description: Real-time and historical market data for equities, fixed income, commodities, and currencies.
-    humanURL: https://www.bloomberg.com/professional/support/api-library/
-    tags:
-      - Equities
-      - Fixed Income
-      - Market Data
-      - Real-Time
-    properties:
-      - type: Documentation
-        url: https://www.bloomberg.com/professional/support/api-library/
-  - aid: bloomberg-apis:bloomberg-news-api
-    name: Bloomberg News API
-    description: Access to Bloomberg's global news content, including articles, videos, and multimedia.
-    humanURL: https://www.bloomberg.com/professional/product/news-data-feeds/
-    tags:
-      - Articles
-      - Content
-      - Media
-      - News
-    properties:
-      - type: Documentation
-        url: https://www.bloomberg.com/professional/product/news-data-feeds/
-  - aid: bloomberg-apis:bloomberg-data-license-api
-    name: Bloomberg Data License API
-    description: Bulk data delivery service for historical and reference data.
-    humanURL: https://www.bloomberg.com/professional/products/data/data-management/data-license/
-    tags:
-      - Bulk Data
-      - Enterprise
-      - Historical Data
-      - Reference Data
-    properties:
-      - type: Documentation
-        url: https://www.bloomberg.com/professional/products/data/data-management/data-license/
+- aid: bloomberg-apis:bloomberg-market-data-feed
+  name: Bloomberg Market Data Feed
+  description: >-
+    Real-time and historical market data for equities, fixed income, commodities, and currencies.
+  humanURL: https://www.bloomberg.com/professional/support/api-library/
+  tags:
+  - Equities
+  - Fixed Income
+  - Market Data
+  - Real-Time
+  properties:
+  - type: Documentation
+    url: https://www.bloomberg.com/professional/support/api-library/
+- aid: bloomberg-apis:bloomberg-news-api
+  name: Bloomberg News API
+  description: Access to Bloomberg's global news content, including articles, videos, and multimedia.
+  humanURL: https://www.bloomberg.com/professional/product/news-data-feeds/
+  tags:
+  - Articles
+  - Content
+  - Media
+  - News
+  properties:
+  - type: Documentation
+    url: https://www.bloomberg.com/professional/product/news-data-feeds/
+- aid: bloomberg-apis:bloomberg-data-license-api
+  name: Bloomberg Data License API
+  description: Bulk data delivery service for historical and reference data.
+  humanURL: https://www.bloomberg.com/professional/products/data/data-management/data-license/
+  tags:
+  - Bulk Data
+  - Enterprise
+  - Historical Data
+  - Reference Data
+  properties:
+  - type: Documentation
+    url: https://www.bloomberg.com/professional/products/data/data-management/data-license/
+- aid: bloomberg-apis:bloomberg-apis-apiauth-api
+  name: Bloomberg APIs apiauth API
+  description: API Authorization Service — entitlements and identity
+  humanURL: https://www.bloomberg.com/professional/support/api-library/
+  tags:
+  - apiauth
+  properties:
+  - type: OpenAPI
+    url: openapi/bloomberg-apis-apiauth-api-openapi.yml
+- aid: bloomberg-apis:bloomberg-apis-apiflds-api
+  name: Bloomberg APIs apiflds API
+  description: API Field Information Service — discover and search Bloomberg fields
+  humanURL: https://www.bloomberg.com/professional/support/api-library/
+  tags:
+  - apiflds
+  properties:
+  - type: OpenAPI
+    url: openapi/bloomberg-apis-apiflds-api-openapi.yml
+- aid: bloomberg-apis:bloomberg-apis-instruments-api
+  name: Bloomberg APIs instruments API
+  description: Instruments Service — security/curve/government lookups
+  humanURL: https://www.bloomberg.com/professional/support/api-library/
+  tags:
+  - instruments
+  properties:
+  - type: OpenAPI
+    url: openapi/bloomberg-apis-instruments-api-openapi.yml
+- aid: bloomberg-apis:bloomberg-apis-mktbar-api
+  name: Bloomberg APIs mktbar API
+  description: Market Bar Subscription Service — streaming subscription
+  humanURL: https://www.bloomberg.com/professional/support/api-library/
+  tags:
+  - mktbar
+  properties:
+  - type: OpenAPI
+    url: openapi/bloomberg-apis-mktbar-api-openapi.yml
+- aid: bloomberg-apis:bloomberg-apis-mktdata-api
+  name: Bloomberg APIs mktdata API
+  description: Market Data Service — streaming subscription paradigm
+  humanURL: https://www.bloomberg.com/professional/support/api-library/
+  tags:
+  - mktdata
+  properties:
+  - type: OpenAPI
+    url: openapi/bloomberg-apis-mktdata-api-openapi.yml
+- aid: bloomberg-apis:bloomberg-apis-mktvwap-api
+  name: Bloomberg APIs mktvwap API
+  description: Custom VWAP Service — streaming subscription
+  humanURL: https://www.bloomberg.com/professional/support/api-library/
+  tags:
+  - mktvwap
+  properties:
+  - type: OpenAPI
+    url: openapi/bloomberg-apis-mktvwap-api-openapi.yml
+- aid: bloomberg-apis:bloomberg-apis-pagedata-api
+  name: Bloomberg APIs pagedata API
+  description: Page Data Service — GPGX page subscription
+  humanURL: https://www.bloomberg.com/professional/support/api-library/
+  tags:
+  - pagedata
+  properties:
+  - type: OpenAPI
+    url: openapi/bloomberg-apis-pagedata-api-openapi.yml
+- aid: bloomberg-apis:bloomberg-apis-refdata-api
+  name: Bloomberg APIs refdata API
+  description: Reference Data Service operations — request/response paradigm
+  humanURL: https://www.bloomberg.com/professional/support/api-library/
+  tags:
+  - refdata
+  properties:
+  - type: OpenAPI
+    url: openapi/bloomberg-apis-refdata-api-openapi.yml
+- aid: bloomberg-apis:bloomberg-apis-tasvc-api
+  name: Bloomberg APIs tasvc API
+  description: Technical Analysis Service — historical, intraday, and real-time studies
+  humanURL: https://www.bloomberg.com/professional/support/api-library/
+  tags:
+  - tasvc
+  properties:
+  - type: OpenAPI
+    url: openapi/bloomberg-apis-tasvc-api-openapi.yml
 common:
   - type: AgenticAccess
     url: agentic-access/bloomberg-apis-agentic-access.yml
