@@ -1,0 +1,1737 @@
+openapi: 3.1.0
+info:
+  title: Bloomberg API (BLPAPI)
+  version: '2.54'
+  summary: Logical OpenAPI representation of the Bloomberg API (BLPAPI) v3.x
+  description: |
+    The Bloomberg API (BLPAPI) is the official client-side library for accessing
+    Bloomberg market data, reference data, news, and analytics services across
+    Desktop API, Server API, and B-PIPE delivery models.
+
+    > **Important — protocol shape**: The native BLPAPI is **NOT** an HTTP/REST
+    > API. It is a binary, session-oriented, message-passing API delivered over
+    > the Bloomberg Network using the BLPAPI client SDK (C, C++, Java, .NET, Python).
+    > It uses a request/response paradigm and a subscription paradigm rather than
+    > stateless HTTP verbs.
+    >
+    > This OpenAPI document is a **logical mapping** of the BLPAPI service and
+    > schema model into HTTP-shaped operations so that:
+    >
+    >   - The request and response message shapes for each Bloomberg service
+    >     can be discovered, indexed, and reasoned about by tooling that speaks OpenAPI.
+    >   - Agents and code-generators can derive typed client wrappers around the
+    >     official BLPAPI SDK.
+    >   - The Bloomberg services and their operations become discoverable in
+    >     APIs.json indexes alongside REST APIs.
+    >
+    > **It is not a runnable HTTP gateway**. Calls described here must be
+    > translated into BLPAPI SDK requests against a Bloomberg session.
+    >
+    > For Bloomberg's REST/HTTP products (Bloomberg Data License REST API,
+    > Bloomberg HAPI, Enterprise Data Catalog) refer to those products' own
+    > developer portals — they are separate from BLPAPI.
+
+    ## Services
+
+    The BLPAPI exposes services at well-known service names:
+
+    - `//blp/refdata` — Reference Data Service (request/response)
+    - `//blp/mktdata` — Market Data Service (subscription)
+    - `//blp/mktvwap` — Custom VWAP Service (subscription)
+    - `//blp/mktbar` — Market Bar Subscription Service (subscription)
+    - `//blp/apiflds` — API Field Information Service (request/response)
+    - `//blp/pagedata` — Page Data Service (subscription)
+    - `//blp/tasvc` — Technical Analysis Service (request/response)
+    - `//blp/apiauth` — API Authorization Service (request/response)
+    - `//blp/instruments` — Instruments Service (request/response)
+
+    B-PIPE-only services (`//blp/mktdepthdata`, `//blp/mktlist`, `//blp/srcref`)
+    are documented in the BLPAPI Developer's Guide section 9 and not modeled here.
+
+    ## Identifier formats
+
+    Securities follow the format `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]`
+    with optional Yellow Key (Govt, Corp, Mtge, M-Mkt, Muni, Pfd, Equity, Comdty,
+    Index, Curncy, Client). The default Topic Prefix is `ticker`. Other prefixes
+    include `cusip`, `isin`, `sedol1`, `sedol2`, `bbgid`, `buid`, `wpk`, `sicovam`,
+    `common`, `bsid`, `svm`, `cins`, `cats`.
+
+    Examples: `IBM US Equity`, `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`,
+    `GBPUSD BAAM Curncy`.
+
+    ## Auth and Permissioning
+
+    BLPAPI uses Entitlement IDs (EIDs), the `//blp/apiauth` service, and Identity
+    Objects to gate access to data. Three deployment-specific authorization models
+    apply:
+
+    - **Server API** — IP-based authorization
+    - **B-PIPE** — Token-based authorization with separate authentication step
+    - **Desktop API** — User context derived from the Bloomberg Professional terminal
+
+    See section 6 of the Developer's Guide for details.
+  contact:
+    name: Bloomberg Production Support
+    url: https://www.bloomberg.com/professional/support/
+  license:
+    name: Permissive (Bloomberg sample license terms)
+  termsOfService: https://www.bloomberg.com/professional/support/api-library/
+externalDocs:
+  description: Bloomberg API Developer's Guide v2.54 (June 30, 2014)
+  url: https://www.bloomberg.com/professional/support/api-library/
+
+servers:
+  - url: blpapi+session://{session}
+    description: |
+      Logical BLPAPI session endpoint. In production, applications open a
+      `Session` against `Session.Options` configured for Desktop API
+      (`localhost:8194`), Server API (`<server-host>:8194` with ASID
+      authentication), or B-PIPE (multiple BPIPE hosts with token authentication).
+    variables:
+      session:
+        default: localhost
+        description: Session identifier — Desktop, Server API ASID, or B-PIPE BPID
+
+tags:
+  - name: refdata
+    description: Reference Data Service operations — request/response paradigm
+  - name: mktdata
+    description: Market Data Service — streaming subscription paradigm
+  - name: mktbar
+    description: Market Bar Subscription Service — streaming subscription
+  - name: mktvwap
+    description: Custom VWAP Service — streaming subscription
+  - name: apiflds
+    description: API Field Information Service — discover and search Bloomberg fields
+  - name: pagedata
+    description: Page Data Service — GPGX page subscription
+  - name: tasvc
+    description: Technical Analysis Service — historical, intraday, and real-time studies
+  - name: apiauth
+    description: API Authorization Service — entitlements and identity
+  - name: instruments
+    description: Instruments Service — security/curve/government lookups
+
+paths:
+  # =========================================================================
+  # Reference Data Service —— //blp/refdata
+  # =========================================================================
+  /refdata/ReferenceDataRequest:
+    post:
+      operationId: referenceDataRequest
+      tags: [refdata]
+      summary: Request reference data for one or more securities
+      description: |
+        Returns a snapshot of current values for a set of (security, field) pairs.
+        Multiple securities and fields per request. Supports overrides,
+        entitlements echo, formatted-value mode, UTC timestamps, and forced delay.
+
+        **BLPAPI service**: `//blp/refdata`
+        **Operation**: `ReferenceDataRequest`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/ReferenceDataRequest'
+      responses:
+        '200':
+          description: ReferenceDataResponse (PARTIAL_RESPONSE or RESPONSE message)
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/ReferenceDataResponse'
+
+  /refdata/HistoricalDataRequest:
+    post:
+      operationId: historicalDataRequest
+      tags: [refdata]
+      summary: Request end-of-day historical data over a date range
+      description: |
+        Retrieves end-of-day data for one or more (security, field) pairs over a
+        defined period. Supports daily, weekly, monthly, quarterly, semi-annual,
+        and annual periodicity. Adjustments for splits, dividends, abnormal cash
+        events, and DPDF settings are configurable.
+
+        **BLPAPI service**: `//blp/refdata`
+        **Operation**: `HistoricalDataRequest`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/HistoricalDataRequest'
+      responses:
+        '200':
+          description: HistoricalDataResponse — one HistoricalDataTable per security
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/HistoricalDataResponse'
+
+  /refdata/IntradayTickRequest:
+    post:
+      operationId: intradayTickRequest
+      tags: [refdata]
+      summary: Request tick-by-tick history for a single security
+      description: |
+        Returns each tick (TRADE, BID, ASK, BID_BEST, ASK_BEST, MID_PRICE,
+        AT_TRADE, BEST_BID, BEST_ASK) over a defined UTC time range for one
+        security. Bloomberg keeps 140 days of intraday history.
+
+        **BLPAPI service**: `//blp/refdata`
+        **Operation**: `IntradayTickRequest`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/IntradayTickRequest'
+      responses:
+        '200':
+          description: IntradayTickResponse with tickData array
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/IntradayTickResponse'
+
+  /refdata/IntradayBarRequest:
+    post:
+      operationId: intradayBarRequest
+      tags: [refdata]
+      summary: Request intraday bar (OHLCV) history for a single security
+      description: |
+        Returns aggregated bars (OPEN/HIGH/LOW/CLOSE/VOLUME/NUMBER_OF_TICKS)
+        over a defined UTC time range for a single security and event type.
+        Bar interval can be 1 to 1440 minutes.
+
+        **BLPAPI service**: `//blp/refdata`
+        **Operation**: `IntradayBarRequest`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/IntradayBarRequest'
+      responses:
+        '200':
+          description: IntradayBarResponse with barTickData array
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/IntradayBarResponse'
+
+  /refdata/PortfolioDataRequest:
+    post:
+      operationId: portfolioDataRequest
+      tags: [refdata]
+      summary: Request portfolio positions and member data
+      description: |
+        Retrieves change information and portfolio positions for a portfolio
+        identified by Portfolio ID (from `PRTU<GO>`). Supports historical
+        retrieval via the REFERENCE_DATE override.
+
+        **BLPAPI service**: `//blp/refdata`
+        **Operation**: `PortfolioDataRequest`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/PortfolioDataRequest'
+      responses:
+        '200':
+          description: PortfolioDataResponse
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/PortfolioDataResponse'
+
+  /refdata/BeqsRequest:
+    post:
+      operationId: beqsRequest
+      tags: [refdata]
+      summary: Request data for a Bloomberg Equity Screening (EQS) screen
+      description: |
+        Returns the security data for a screen created using `EQS <GO>` on
+        the Bloomberg Professional service. Supports private/global screens,
+        language selection, group filtering, and PiTDate historical access.
+
+        **BLPAPI service**: `//blp/refdata`
+        **Operation**: `BeqsRequest`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/BeqsRequest'
+      responses:
+        '200':
+          description: BeqsResponse
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/BeqsResponse'
+
+  # =========================================================================
+  # Market Data Service —— //blp/mktdata (subscription)
+  # =========================================================================
+  /mktdata/subscribe:
+    post:
+      operationId: marketDataSubscribe
+      tags: [mktdata]
+      summary: Subscribe to streaming market data for one or more securities
+      description: |
+        Establishes a streaming subscription. The initial SUMMARY message
+        contains all subscribed fields; subsequent updates contain only fields
+        whose values changed.
+
+        **BLPAPI service**: `//blp/mktdata`
+        **Paradigm**: Subscription (delivers SUBSCRIPTION_DATA / SUBSCRIPTION_STATUS events)
+
+        > Subscriptions are inherently asynchronous and stateful — this HTTP
+        > shape only captures subscription initiation. The real BLPAPI client
+        > attaches an EventQueue or callback that receives updates until the
+        > subscription is unsubscribed.
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-subscription:
+            schema:
+              $ref: '#/components/schemas/MarketDataSubscriptionList'
+      responses:
+        '202':
+          description: Subscription accepted — updates delivered asynchronously
+          content:
+            application/x-blpapi-event-stream:
+              schema:
+                $ref: '#/components/schemas/MarketDataEvents'
+
+  # =========================================================================
+  # Market Bar Subscription Service —— //blp/mktbar
+  # =========================================================================
+  /mktbar/subscribe:
+    post:
+      operationId: marketBarSubscribe
+      tags: [mktbar]
+      summary: Subscribe to streaming intraday bar data
+      description: |
+        Establishes a subscription that delivers bucketized OHLCV bars at a
+        configurable interval. Topic format:
+        `//blp/mktbar/SYMBOLOGY/SECURITY?START_TIME=st&END_TIME=et&BAR_SIZE=bz`
+
+        Delivers MarketBarStart, MarketBarUpdate, MarketBarIntervalEnd,
+        and MarketBarEnd events.
+
+        **BLPAPI service**: `//blp/mktbar`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-subscription:
+            schema:
+              $ref: '#/components/schemas/MarketBarSubscription'
+      responses:
+        '202':
+          description: Subscription accepted — bar events delivered asynchronously
+          content:
+            application/x-blpapi-event-stream:
+              schema:
+                $ref: '#/components/schemas/MarketBarEvents'
+
+  # =========================================================================
+  # Custom VWAP Service —— //blp/mktvwap
+  # =========================================================================
+  /mktvwap/subscribe:
+    post:
+      operationId: customVWAPSubscribe
+      tags: [mktvwap]
+      summary: Subscribe to streaming Custom VWAP for an equity
+      description: |
+        Streams Custom Volume Weighted Average Price values with a series of
+        VWAP-specific overrides (start/end times, condition codes, lot sizes).
+        Topic format:
+        `//blp/mktvwap/ticker/SECURITY?VWAP_START_TIME=st&VWAP_END_TIME=et`
+
+        **BLPAPI service**: `//blp/mktvwap`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-subscription:
+            schema:
+              $ref: '#/components/schemas/CustomVWAPSubscription'
+      responses:
+        '202':
+          description: Subscription accepted
+          content:
+            application/x-blpapi-event-stream:
+              schema:
+                $ref: '#/components/schemas/MarketDataEvents'
+
+  # =========================================================================
+  # API Field Information Service —— //blp/apiflds
+  # =========================================================================
+  /apiflds/FieldInfoRequest:
+    post:
+      operationId: fieldInfoRequest
+      tags: [apiflds]
+      summary: Get field metadata by id (mnemonic or alpha-numeric identifier)
+      description: |
+        Returns descriptive information for one or more Bloomberg fields
+        specified by mnemonic (e.g. `LAST_PRICE`) or alpha-numeric ID
+        (e.g. `pq005`). Optionally returns documentation.
+
+        **BLPAPI service**: `//blp/apiflds`
+        **Operation**: `FieldInfoRequest`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/FieldInfoRequest'
+      responses:
+        '200':
+          description: FieldResponse
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/FieldResponse'
+
+  /apiflds/FieldSearchRequest:
+    post:
+      operationId: fieldSearchRequest
+      tags: [apiflds]
+      summary: Full-text search Bloomberg fields by mnemonic / description
+      description: |
+        Returns fields matching a search string, optionally filtered by
+        category, product type, and field type (Static / Real Time).
+
+        **BLPAPI service**: `//blp/apiflds`
+        **Operation**: `FieldSearchRequest`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/FieldSearchRequest'
+      responses:
+        '200':
+          description: FieldResponse (same shape as FieldInfoRequest)
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/FieldResponse'
+
+  /apiflds/CategorizedFieldSearchRequest:
+    post:
+      operationId: categorizedFieldSearchRequest
+      tags: [apiflds]
+      summary: Search Bloomberg fields with results grouped by category tree
+      description: |
+        Returns fields matching a search string, with results arranged into
+        the Bloomberg field-category tree.
+
+        **BLPAPI service**: `//blp/apiflds`
+        **Operation**: `CategorizedFieldSearchRequest`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/CategorizedFieldSearchRequest'
+      responses:
+        '200':
+          description: CategorizedFieldResponse
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/CategorizedFieldResponse'
+
+  # =========================================================================
+  # Page Data Service —— //blp/pagedata
+  # =========================================================================
+  /pagedata/subscribe:
+    post:
+      operationId: pageDataSubscribe
+      tags: [pagedata]
+      summary: Subscribe to a Bloomberg GPGX page
+      description: |
+        Subscribes to a GPGX page topic in the form `GPGX/MONITOR/PAGE` (e.g.
+        `0708/012/0001`). Specifies which rows on the page to subscribe to.
+        Receives PageUpdate (full page) and RowUpdate (partial) events.
+
+        **BLPAPI service**: `//blp/pagedata`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-subscription:
+            schema:
+              $ref: '#/components/schemas/PageDataSubscription'
+      responses:
+        '202':
+          description: Subscription accepted — page/row updates delivered asynchronously
+          content:
+            application/x-blpapi-event-stream:
+              schema:
+                $ref: '#/components/schemas/PageDataEvents'
+
+  # =========================================================================
+  # Technical Analysis Service —— //blp/tasvc
+  # =========================================================================
+  /tasvc/StudyRequest:
+    post:
+      operationId: studyRequest
+      tags: [tasvc]
+      summary: Request a technical analysis study (historical, intraday, or real-time)
+      description: |
+        Runs a Bloomberg technical analysis study (e.g. SMA, EMA, RSI, MACD,
+        Bollinger Bands, Stochastics) and returns the computed series.
+        Three data types: HistoricalEndOfDay, Intraday, and Real-time.
+
+        **BLPAPI service**: `//blp/tasvc`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/StudyRequest'
+      responses:
+        '200':
+          description: Study response with computed series
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/StudyResponse'
+
+  # =========================================================================
+  # API Authorization Service —— //blp/apiauth
+  # =========================================================================
+  /apiauth/AuthorizationRequest:
+    post:
+      operationId: authorizationRequest
+      tags: [apiauth]
+      summary: Authorize a Bloomberg user against an IP address (Server API) or token (B-PIPE)
+      description: |
+        Checks whether a given Bloomberg Anywhere user (UUID) is logged into
+        Bloomberg Professional at the specified location, and returns an
+        Identity object that subsequent requests can use to assert
+        permissioning.
+
+        **BLPAPI service**: `//blp/apiauth`
+        **Operation**: `AuthorizationRequest`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/AuthorizationRequest'
+      responses:
+        '200':
+          description: AuthorizationSuccess or AuthorizationFailure
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/AuthorizationResponse'
+
+  /apiauth/LogonStatusRequest:
+    post:
+      operationId: logonStatusRequest
+      tags: [apiauth]
+      summary: Check whether a UUID is logged into Bloomberg Anywhere at an IP
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/LogonStatusRequest'
+      responses:
+        '200':
+          description: LogonStatusResponse with `isLoggedOn` boolean
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/LogonStatusResponse'
+
+  /apiauth/UserEntitlementsRequest:
+    post:
+      operationId: userEntitlementsRequest
+      tags: [apiauth]
+      summary: List exchange entitlements for a Bloomberg user
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/UserEntitlementsRequest'
+      responses:
+        '200':
+          description: UserEntitlementsResponse with EID array
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/UserEntitlementsResponse'
+
+  /apiauth/SecurityEntitlementsRequest:
+    post:
+      operationId: securityEntitlementsRequest
+      tags: [apiauth]
+      summary: Get exchange entitlements for one or more securities
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/SecurityEntitlementsRequest'
+      responses:
+        '200':
+          description: SecurityEntitlementsResponse with per-security EID array
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/SecurityEntitlementsResponse'
+
+  /apiauth/AuthorizationTokenRequest:
+    post:
+      operationId: authorizationTokenRequest
+      tags: [apiauth]
+      summary: Request an authorization token for a Server API application (B-PIPE)
+      description: |
+        Used by B-PIPE applications to acquire a one-time token for
+        authentication. The token is then submitted via AuthorizationRequest.
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/AuthorizationTokenRequest'
+      responses:
+        '200':
+          description: AuthorizationTokenResponse (or responseError on failure)
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/AuthorizationTokenResponse'
+
+  # =========================================================================
+  # Instruments Service —— //blp/instruments
+  # =========================================================================
+  /instruments/SecurityLookupRequest:
+    post:
+      operationId: securityLookupRequest
+      tags: [instruments]
+      summary: Look up securities by free-text query
+      description: |
+        Searches Bloomberg's instrument universe by ticker / name. Returns
+        candidate securities with their full Bloomberg identifiers.
+
+        **BLPAPI service**: `//blp/instruments`
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/SecurityLookupRequest'
+      responses:
+        '200':
+          description: SecurityLookupResponse
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/InstrumentLookupResponse'
+
+  /instruments/CurveLookupRequest:
+    post:
+      operationId: curveLookupRequest
+      tags: [instruments]
+      summary: Look up Bloomberg yield curves
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/CurveLookupRequest'
+      responses:
+        '200':
+          description: CurveLookupResponse
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/InstrumentLookupResponse'
+
+  /instruments/GovtLookupRequest:
+    post:
+      operationId: govtLookupRequest
+      tags: [instruments]
+      summary: Look up government securities
+      requestBody:
+        required: true
+        content:
+          application/x-blpapi-request:
+            schema:
+              $ref: '#/components/schemas/GovtLookupRequest'
+      responses:
+        '200':
+          description: GovtLookupResponse
+          content:
+            application/x-blpapi-response:
+              schema:
+                $ref: '#/components/schemas/InstrumentLookupResponse'
+
+components:
+  schemas:
+    # -------------------------------------------------------------------
+    # Common types
+    # -------------------------------------------------------------------
+    Security:
+      type: string
+      description: |
+        Bloomberg security identifier in the form
+        `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]` with optional Yellow Key.
+        Default Topic Prefix is `ticker`. Examples: `IBM US Equity`,
+        `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`.
+      examples:
+        - IBM US Equity
+        - VOD LN Equity
+        - /cusip/912828GM6@BGN
+        - MSFT@ETPX US Equity
+        - GBPUSD BAAM Curncy
+
+    Field:
+      type: string
+      description: |
+        Bloomberg field mnemonic (e.g. `PX_LAST`, `LAST_PRICE`, `BID`, `ASK`)
+        or alpha-numeric CALCRT id (e.g. `pq005`).
+      examples:
+        - PX_LAST
+        - LAST_PRICE
+        - BID
+        - ASK
+        - VOLUME
+
+    Override:
+      type: object
+      description: A name/value override applied to a derived field calculation.
+      required: [fieldId, value]
+      properties:
+        fieldId:
+          type: string
+          description: Field mnemonic / alpha-numeric (e.g. `PRICING_SOURCE`, `PR092`).
+        value:
+          type: string
+          description: |
+            Override value as a string. Dates use `YYYYMMDD`. Decimals always
+            use `.` as the decimal separator regardless of locale.
+      examples:
+        - { fieldId: PRICING_SOURCE, value: BGN }
+        - { fieldId: BEST_DATA_SOURCE_OVERRIDE, value: BLI }
+
+    ErrorInfo:
+      type: object
+      description: Standard error envelope used in BLPAPI responses.
+      required: [source, code, category, message]
+      properties:
+        source:
+          type: string
+          description: Bloomberg internal error source (e.g. `bbdbl1.r1.kgw`).
+        code:
+          type: integer
+          description: Bloomberg internal error code.
+        category:
+          type: string
+          description: General classification of the failure.
+          examples: [BAD_SEC, BAD_FLD, INVALID_REQUEST, NO_AUTH]
+        message:
+          type: string
+          description: Human-readable description of the failure.
+        subcategory:
+          type: string
+          description: (Optional) more specific classification of the failure.
+
+    FieldData:
+      type: object
+      description: A single returned (field, value) datum.
+      properties:
+        '*':
+          oneOf:
+            - { type: string }
+            - { type: number }
+            - { type: integer }
+            - { type: boolean }
+          description: |
+            The field name is a property name (e.g. `PX_LAST`, `LAST_PRICE`),
+            and the value is the typed data point. When `returnFormattedValue`
+            is true on the request, all values are returned as strings.
+
+    FieldException:
+      type: object
+      description: Indicates a field could not be returned for a security.
+      required: [fieldId, errorInfo]
+      properties:
+        fieldId:
+          type: string
+        errorInfo:
+          $ref: '#/components/schemas/ErrorInfo'
+
+    SecurityData:
+      type: object
+      description: Per-security data block in a Reference / Historical / BEQS response.
+      required: [security]
+      properties:
+        security:
+          $ref: '#/components/schemas/Security'
+        sequenceNumber:
+          type: integer
+          description: Position of the security in the original request.
+        fieldData:
+          oneOf:
+            - { $ref: '#/components/schemas/FieldData' }
+            - { type: array, items: { $ref: '#/components/schemas/FieldData' } }
+          description: |
+            Reference responses return a single fieldData object per security.
+            Historical responses return an array of fieldData rows (one per
+            interval) — each row may include `relativeDate` and `date` keys
+            in addition to field values.
+        fieldExceptions:
+          type: array
+          items: { $ref: '#/components/schemas/FieldException' }
+        securityError:
+          $ref: '#/components/schemas/ErrorInfo'
+
+    EidData:
+      type: object
+      description: Entitlement Identifier(s) attached to a security or user.
+      properties:
+        entitlementId:
+          type: integer
+        eids:
+          type: array
+          items: { type: integer }
+        status:
+          type: integer
+          description: 0 = success; non-zero indicates failure.
+        sequenceNumber:
+          type: integer
+
+    # -------------------------------------------------------------------
+    # ReferenceDataRequest / Response
+    # -------------------------------------------------------------------
+    ReferenceDataRequest:
+      type: object
+      required: [securities, fields]
+      properties:
+        securities:
+          type: array
+          items: { $ref: '#/components/schemas/Security' }
+          description: One or more Bloomberg securities.
+        fields:
+          type: array
+          items: { $ref: '#/components/schemas/Field' }
+          description: One or more Bloomberg field mnemonics or CALCRT ids.
+        overrides:
+          type: array
+          items: { $ref: '#/components/schemas/Override' }
+          description: Up to 100 overrides applied to derived field calculations.
+          maxItems: 100
+        returnEids:
+          type: boolean
+          description: Populate fieldData with EID date entries.
+          default: false
+        returnFormattedValue:
+          type: boolean
+          description: Force all values to be returned as strings.
+          default: false
+        useUTCTime:
+          type: boolean
+          description: Return date/time values in UTC. Default follows TZDF<GO> setting.
+          default: false
+        forcedDelay:
+          type: boolean
+          description: Return data delayed by the exchange's delay period (typically 15 min).
+          default: false
+
+    ReferenceDataResponse:
+      type: object
+      properties:
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
+        securityData:
+          type: array
+          items: { $ref: '#/components/schemas/SecurityData' }
+
+    # -------------------------------------------------------------------
+    # HistoricalDataRequest / Response
+    # -------------------------------------------------------------------
+    HistoricalDataRequest:
+      type: object
+      required: [securities, fields, startDate]
+      properties:
+        securities:
+          type: array
+          items: { $ref: '#/components/schemas/Security' }
+        fields:
+          type: array
+          items: { $ref: '#/components/schemas/Field' }
+        startDate:
+          type: string
+          description: Start date in YYYYMMDD format (or BLPAPI Relative Date syntax).
+          example: '20100101'
+        endDate:
+          type: string
+          description: End date in YYYYMMDD format. Defaults to current day if omitted.
+          example: '20101231'
+        periodicityAdjustment:
+          type: string
+          enum: [ACTUAL, CALENDAR, FISCAL]
+          default: CALENDAR
+        periodicitySelection:
+          type: string
+          enum: [DAILY, WEEKLY, MONTHLY, QUARTERLY, SEMI_ANNUALLY, YEARLY]
+          default: DAILY
+        currency:
+          type: string
+          description: 3-letter ISO currency code. View `WCV<GO>` for list.
+          example: USD
+        overrideOption:
+          type: string
+          enum: [OVERRIDE_OPTION_CLOSE, OVERRIDE_OPTION_GPA]
+        pricingOption:
+          type: string
+          enum: [PRICING_OPTION_PRICE, PRICING_OPTION_YIELD]
+        nonTradingDayFillOption:
+          type: string
+          enum: [NON_TRADING_WEEKDAYS, ALL_CALENDAR_DAYS, ACTIVE_DAYS_ONLY]
+          default: NON_TRADING_WEEKDAYS
+        nonTradingDayFillMethod:
+          type: string
+          enum: [PREVIOUS_VALUE, NIL_VALUE]
+        maxDataPoints:
+          type: integer
+          description: |
+            Maximum number of data points to return. If the original set is
+            larger, the most-recent N are returned.
+          minimum: 1
+        returnEids:
+          type: boolean
+          default: false
+        returnRelativeDate:
+          type: boolean
+          default: false
+        adjustmentNormal:
+          type: boolean
+          description: Adjust for change-on-day cash dividends.
+          default: false
+        adjustmentAbnormal:
+          type: boolean
+          description: Adjust for abnormal cash dividends.
+          default: false
+        adjustmentSplit:
+          type: boolean
+          description: Adjust for capital changes (splits, spin-offs, rights).
+          default: false
+        adjustmentFollowDPDF:
+          type: boolean
+          description: Follow `DPDF<GO>` settings for adjustments.
+          default: true
+        calendarCodeOverride:
+          type: string
+          description: Two-character calendar code from `CDR<GO>`. Daily requests only.
+        calendarOverridesInfo:
+          type: object
+          properties:
+            calendarOverrides:
+              type: array
+              items: { type: string }
+            calendarOverridesOperation:
+              type: string
+              enum: [CDR_AND, CDR_OR]
+              default: CDR_AND
+        overrides:
+          type: array
+          items: { $ref: '#/components/schemas/Override' }
+
+    HistoricalDataResponse:
+      type: object
+      properties:
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
+        securityData:
+          $ref: '#/components/schemas/SecurityData'
+
+    # -------------------------------------------------------------------
+    # IntradayTickRequest / Response
+    # -------------------------------------------------------------------
+    IntradayTickRequest:
+      type: object
+      required: [security, eventTypes, startDateTime, endDateTime]
+      properties:
+        security:
+          $ref: '#/components/schemas/Security'
+          description: Single security only.
+        eventTypes:
+          type: array
+          items:
+            type: string
+            enum: [TRADE, BID, ASK, BID_BEST, ASK_BEST, MID_PRICE, AT_TRADE, BEST_BID, BEST_ASK]
+        startDateTime:
+          type: string
+          format: date-time
+          description: Start time in UTC, format `YYYY-MM-DDTHH:MM:SS`.
+        endDateTime:
+          type: string
+          format: date-time
+        includeConditionCodes:
+          type: boolean
+          default: false
+        includeNonPlottableEvents:
+          type: boolean
+          default: false
+        includeExchangeCodes:
+          type: boolean
+          default: false
+        returnEids:
+          type: boolean
+          default: false
+        includeBrokerCodes:
+          type: boolean
+          description: Canadian, Finnish, Mexican, Philippine, Swedish equities only.
+          default: false
+        includeRpsCodes:
+          type: boolean
+          description: Reporting Party Side codes.
+          default: false
+        includeBicMicCodes:
+          type: boolean
+          description: Bank Identifier Code / Market Identifier Code.
+          default: false
+
+    IntradayTickResponse:
+      type: object
+      properties:
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
+        tickData:
+          type: object
+          properties:
+            tickData:
+              type: array
+              items:
+                type: object
+                properties:
+                  time: { type: string, format: date-time }
+                  type:
+                    type: string
+                    enum: [TRADE, BID, ASK, BID_BEST, ASK_BEST, MID_PRICE, AT_TRADE, BEST_BID, BEST_ASK]
+                  value: { type: number }
+                  size: { type: integer }
+                  conditionCode: { type: string }
+                  exchangeCode: { type: string }
+                  micCode: { type: string }
+                  brokerBuyCode: { type: string }
+                  brokerSellCode: { type: string }
+                  rpsCode: { type: string, enum: [B, S, D] }
+        eidData:
+          type: array
+          items: { $ref: '#/components/schemas/EidData' }
+
+    # -------------------------------------------------------------------
+    # IntradayBarRequest / Response
+    # -------------------------------------------------------------------
+    IntradayBarRequest:
+      type: object
+      required: [security, eventType, startDateTime, endDateTime, interval]
+      properties:
+        security:
+          $ref: '#/components/schemas/Security'
+        eventType:
+          type: string
+          enum: [TRADE, BID, ASK, BID_BEST, ASK_BEST, BEST_BID, BEST_ASK]
+        startDateTime:
+          type: string
+          format: date-time
+        endDateTime:
+          type: string
+          format: date-time
+        interval:
+          type: integer
+          minimum: 1
+          maximum: 1440
+          description: Bar length in minutes (1 = one-minute bars, 1440 = daily).
+        gapFillInitialBar:
+          type: boolean
+          description: Fill an empty bar with previous values.
+          default: false
+        returnEids:
+          type: boolean
+          default: false
+        adjustmentNormal:
+          type: boolean
+          default: false
+        adjustmentAbnormal:
+          type: boolean
+          default: false
+        adjustmentSplit:
+          type: boolean
+          default: false
+        adjustmentFollowDPDF:
+          type: boolean
+          default: true
+
+    IntradayBarResponse:
+      type: object
+      properties:
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
+        barData:
+          type: object
+          properties:
+            barTickData:
+              type: array
+              items:
+                type: object
+                properties:
+                  time: { type: string, format: date-time }
+                  open: { type: number }
+                  high: { type: number }
+                  low: { type: number }
+                  close: { type: number }
+                  volume: { type: integer, format: int64 }
+                  numEvents: { type: integer }
+                  value: { type: number }
+        eidData:
+          type: array
+          items: { $ref: '#/components/schemas/EidData' }
+
+    # -------------------------------------------------------------------
+    # PortfolioDataRequest / Response
+    # -------------------------------------------------------------------
+    PortfolioDataRequest:
+      type: object
+      required: [securities, fields]
+      properties:
+        securities:
+          type: array
+          items:
+            type: string
+            description: Portfolio ID from `PRTU<GO>` (e.g. `UXXXXXXX-X Client`).
+        fields:
+          type: array
+          items:
+            type: string
+            enum: [PORTFOLIO_MEMBER, PORTFOLIO_MPOSITION, PORTFOLIO_MWEIGHT, PORTFOLIO_DATA]
+        overrides:
+          type: array
+          items: { $ref: '#/components/schemas/Override' }
+          description: Use REFERENCE_DATE override for historical lookup.
+
+    PortfolioDataResponse:
+      $ref: '#/components/schemas/ReferenceDataResponse'
+
+    # -------------------------------------------------------------------
+    # BeqsRequest / Response
+    # -------------------------------------------------------------------
+    BeqsRequest:
+      type: object
+      required: [screenName]
+      properties:
+        screenName:
+          type: string
+          description: Name of the EQS screen to execute.
+          example: Global Volume Surges
+        screenType:
+          type: string
+          enum: [PRIVATE, GLOBAL]
+          description: PRIVATE = user-defined; GLOBAL = Bloomberg EQS.
+        languageId:
+          type: string
+          enum:
+            - ENGLISH
+            - KANJI
+            - FRENCH
+            - GERMAN
+            - SPANISH
+            - PORTUGUESE
+            - ITALIAN
+            - CHINESE_TRA
+            - KOREAN
+            - CHINESE_SIM
+            - THAI
+            - SWED
+            - FINNISH
+            - DUTCH
+            - MALAY
+            - RUSSIAN
+            - GREEK
+            - POLISH
+            - DANISH
+            - FLEMISH
+            - ESTONIAN
+            - TURKISH
+            - NORWEGIAN
+            - LATVIAN
+            - LITHUANIAN
+            - INDONESIAN
+        Group:
+          type: string
+          description: Screen folder name as defined in `EQS<GO>`.
+        overrides:
+          type: array
+          items: { $ref: '#/components/schemas/Override' }
+          description: Use PiTDate override for historical access.
+
+    BeqsResponse:
+      $ref: '#/components/schemas/ReferenceDataResponse'
+
+    # -------------------------------------------------------------------
+    # Market Data subscription
+    # -------------------------------------------------------------------
+    MarketDataSubscriptionList:
+      type: object
+      required: [subscriptions]
+      properties:
+        subscriptions:
+          type: array
+          items:
+            type: object
+            required: [topic, fields]
+            properties:
+              topic:
+                type: string
+                description: |
+                  Subscription topic — typically `SECURITY` form. Examples:
+                  `IBM US Equity`, `/cusip/912828GM6@BGN`.
+              fields:
+                type: array
+                items: { $ref: '#/components/schemas/Field' }
+                description: Bloomberg fields to subscribe to.
+              options:
+                type: array
+                items: { type: string }
+                description: |
+                  Subscription options as URL-style key/value pairs (e.g.
+                  `interval=1.0`, `delayed=true`).
+              correlationId:
+                type: string
+                description: Application-supplied correlation id for routing.
+
+    MarketDataEvents:
+      type: object
+      description: Event stream messages — SUBSCRIPTION_DATA / SUBSCRIPTION_STATUS.
+      properties:
+        eventType:
+          type: string
+          enum: [SUBSCRIPTION_DATA, SUBSCRIPTION_STATUS, SESSION_STATUS, SERVICE_STATUS]
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              messageType:
+                type: string
+                description: e.g. `MarketDataEvents`, `SubscriptionStarted`, `SubscriptionFailure`.
+              correlationId:
+                type: string
+              data:
+                type: object
+                description: Per-field updates (only changed fields after the initial SUMMARY).
+
+    # -------------------------------------------------------------------
+    # Market Bar subscription
+    # -------------------------------------------------------------------
+    MarketBarSubscription:
+      type: object
+      required: [topic]
+      properties:
+        topic:
+          type: string
+          description: |
+            Topic in the form
+            `//blp/mktbar/SYMBOLOGY/SECURITY?START_TIME=st&END_TIME=et&BAR_SIZE=bz`
+            For example: `//blp/mktbar/ticker/VOD LN Equity?start_time=9:30&bar_size=10`
+        fields:
+          type: array
+          items: { type: string, default: LAST_PRICE }
+        correlationId:
+          type: string
+
+    MarketBarEvents:
+      type: object
+      properties:
+        messageType:
+          type: string
+          enum: [MarketBarStart, MarketBarUpdate, MarketBarIntervalEnd, MarketBarEnd]
+        time: { type: string, format: date-time }
+        date: { type: string, format: date }
+        open: { type: number }
+        high: { type: number }
+        low: { type: number }
+        close: { type: number }
+        value: { type: number }
+        volume: { type: integer, format: int64 }
+        numberOfTicks: { type: integer }
+
+    # -------------------------------------------------------------------
+    # Custom VWAP subscription
+    # -------------------------------------------------------------------
+    CustomVWAPSubscription:
+      type: object
+      required: [topic]
+      properties:
+        topic:
+          type: string
+          description: |
+            Form `//blp/mktvwap/ticker/SECURITY?VWAP_START_TIME=10:00&VWAP_END_TIME=16:00`
+        fields:
+          type: array
+          items: { type: string }
+          description: VWAP fields (e.g. `VWAP`, `VWAP_VOLUME`).
+        correlationId:
+          type: string
+
+    # -------------------------------------------------------------------
+    # API Field Information Service
+    # -------------------------------------------------------------------
+    FieldInfoRequest:
+      type: object
+      required: [id]
+      properties:
+        id:
+          type: array
+          items: { type: string }
+          description: Field mnemonics or alpha-numeric ids.
+          example: [LAST_PRICE, pq005, ds002]
+        returnFieldDocumentation:
+          type: boolean
+          default: false
+        properties:
+          type: array
+          items:
+            type: string
+            enum: [fieldoverridable]
+
+    FieldSearchRequest:
+      type: object
+      required: [searchSpec]
+      properties:
+        searchSpec:
+          type: string
+          description: Search string for field mnemonics / descriptions.
+          example: last price
+        include:
+          type: object
+          description: Inclusive filter — only fields matching are returned.
+          properties:
+            categoryName: { type: array, items: { type: string } }
+            productType: { type: array, items: { type: string } }
+            fieldType:
+              type: string
+              enum: [Static, RealTime, All]
+        exclude:
+          type: object
+          description: Exclusive filter — fields matching are removed from results.
+          properties:
+            categoryName: { type: array, items: { type: string } }
+            productType: { type: array, items: { type: string } }
+            fieldType:
+              type: string
+              enum: [Static, RealTime, All]
+
+    CategorizedFieldSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/FieldSearchRequest'
+
+    FieldResponse:
+      type: object
+      properties:
+        fieldData:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string, description: Bloomberg internal field id }
+              fieldInfo:
+                type: object
+                properties:
+                  mnemonic: { type: string }
+                  description: { type: string }
+                  datatype: { type: string }
+                  documentation: { type: string }
+                  categoryName:
+                    type: array
+                    items: { type: string }
+                  property:
+                    type: array
+                    items: { type: string }
+                  overrides:
+                    type: array
+                    items: { type: string }
+              fieldError:
+                $ref: '#/components/schemas/ErrorInfo'
+
+    CategorizedFieldResponse:
+      type: object
+      properties:
+        category:
+          type: array
+          items:
+            type: object
+            properties:
+              categoryName: { type: string }
+              fieldData:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FieldResponse/properties/fieldData/items'
+
+    # -------------------------------------------------------------------
+    # Page Data subscription
+    # -------------------------------------------------------------------
+    PageDataSubscription:
+      type: object
+      required: [topic]
+      properties:
+        topic:
+          type: string
+          description: Form `GPGX/MONITOR/PAGE` (e.g. `0708/012/0001`).
+          example: '0708/012/0001'
+        fields:
+          type: array
+          items:
+            type: string
+            description: Row specifiers — `1`, `1,2,3`, or `1,6-10,15,16`.
+
+    PageDataEvents:
+      oneOf:
+        - $ref: '#/components/schemas/PageUpdate'
+        - $ref: '#/components/schemas/RowUpdate'
+
+    PageUpdate:
+      type: object
+      properties:
+        numRows: { type: integer }
+        numCols: { type: integer }
+        rowUpdate:
+          type: array
+          items: { $ref: '#/components/schemas/RowUpdate' }
+
+    RowUpdate:
+      type: object
+      properties:
+        rowNum: { type: integer }
+        spanUpdate:
+          type: array
+          items:
+            type: object
+            properties:
+              startCol: { type: integer }
+              length: { type: integer }
+              text: { type: string }
+              attr:
+                type: array
+                items:
+                  type: string
+                  enum: [BLINK, DOUBLEWIDTH, INTENSIFY, POINTANDCLICK, REVERSE, UNDERLINE]
+              fgColor:
+                type: string
+                enum: [AMBER, BLACK, DARKBLUE, DARKGREEN, DEEPBLUE, FLASHINGBLUE, FLASHINGRED, GRAY, LIGHTBLUE, LIGHTGREEN, ORANGE, PINK, RED, VIOLET, WHITE, YELLOW]
+              bgColor:
+                type: string
+                enum: [AMBER, BLACK, DARKBLUE, DARKGREEN, DEEPBLUE, FLASHINGBLUE, FLASHINGRED, GRAY, LIGHTBLUE, LIGHTGREEN, ORANGE, PINK, RED, VIOLET, WHITE, YELLOW]
+
+    # -------------------------------------------------------------------
+    # Technical Analysis Service
+    # -------------------------------------------------------------------
+    StudyRequest:
+      type: object
+      required: [priceSource, studyAttributes]
+      properties:
+        priceSource:
+          type: object
+          oneOf:
+            - $ref: '#/components/schemas/HistoricalPriceSource'
+            - $ref: '#/components/schemas/IntradayPriceSource'
+            - $ref: '#/components/schemas/RealtimePriceSource'
+        studyAttributes:
+          type: object
+          description: |
+            Study-specific parameters (e.g. for SMA: period; for MACD: fastEMA,
+            slowEMA, signalEMA; for Bollinger: period, stdDev). Refer to the
+            BLPAPI Developer's Guide for the full set per study.
+          additionalProperties: true
+
+    HistoricalPriceSource:
+      type: object
+      properties:
+        sourceType:
+          type: string
+          const: HistoricalPriceSource
+        security: { $ref: '#/components/schemas/Security' }
+        priceField:
+          type: string
+          enum: [PX_LAST, PX_OPEN, PX_HIGH, PX_LOW, PX_VOLUME]
+        startDate:
+          type: string
+          example: '20100101'
+        endDate:
+          type: string
+        periodicitySelection:
+          type: string
+          enum: [DAILY, WEEKLY, MONTHLY, QUARTERLY, SEMI_ANNUALLY, YEARLY]
+
+    IntradayPriceSource:
+      type: object
+      properties:
+        sourceType:
+          type: string
+          const: IntradayPriceSource
+        security: { $ref: '#/components/schemas/Security' }
+        eventType:
+          type: string
+          enum: [TRADE, BID, ASK]
+        startDateTime: { type: string, format: date-time }
+        endDateTime: { type: string, format: date-time }
+        interval: { type: integer, minimum: 1, maximum: 1440 }
+
+    RealtimePriceSource:
+      type: object
+      properties:
+        sourceType:
+          type: string
+          const: RealtimePriceSource
+        security: { $ref: '#/components/schemas/Security' }
+
+    StudyResponse:
+      type: object
+      properties:
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
+        studyData:
+          type: array
+          items:
+            type: object
+            properties:
+              date: { type: string, format: date-time }
+              value: { type: number }
+
+    # -------------------------------------------------------------------
+    # API Authorization Service
+    # -------------------------------------------------------------------
+    AuthorizationRequest:
+      type: object
+      properties:
+        uuid:
+          type: integer
+          description: Bloomberg unique user identifier.
+          example: 11223344
+        ipAddress:
+          type: string
+          description: Location where the user is viewing the Server API data.
+          example: 111.22.33.44
+        token:
+          type: string
+          description: |
+            B-PIPE token (deprecated for new applications). Either `ipAddress`
+            or `token` must be supplied.
+          deprecated: true
+        requireAsidEquivalence:
+          type: boolean
+          description: |
+            Deprecated. When true, AuthorizationRequest succeeds only if the
+            user's permissioning matches or exceeds the Server API's.
+          deprecated: true
+          default: false
+
+    AuthorizationResponse:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/AuthorizationSuccess'
+        - $ref: '#/components/schemas/AuthorizationFailure'
+
+    AuthorizationSuccess:
+      type: object
+      properties:
+        AuthorizationSuccess:
+          type: object
+          description: Empty success indicator. Identity object returned on the wire.
+
+    AuthorizationFailure:
+      type: object
+      properties:
+        AuthorizationFailure:
+          type: object
+          properties:
+            reason:
+              $ref: '#/components/schemas/ErrorInfo'
+
+    LogonStatusRequest:
+      type: object
+      required: [uuid, ipAddress]
+      properties:
+        uuid:
+          type: integer
+        ipAddress:
+          type: string
+
+    LogonStatusResponse:
+      type: object
+      properties:
+        isLoggedOn:
+          type: boolean
+          description: True when the UUID is logged into Bloomberg Professional at the IP.
+
+    UserEntitlementsRequest:
+      type: object
+      required: [uuid]
+      properties:
+        uuid:
+          type: integer
+
+    UserEntitlementsResponse:
+      type: object
+      properties:
+        eids:
+          type: array
+          items:
+            type: object
+            properties:
+              entitlementId: { type: integer }
+
+    SecurityEntitlementsRequest:
+      type: object
+      required: [securities]
+      properties:
+        securities:
+          type: array
+          items: { $ref: '#/components/schemas/Security' }
+
+    SecurityEntitlementsResponse:
+      type: object
+      properties:
+        eidData:
+          type: array
+          items:
+            type: object
+            properties:
+              status: { type: integer }
+              sequenceNumber: { type: integer }
+              eids:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    entitlementId: { type: integer }
+
+    AuthorizationTokenRequest:
+      type: object
+      required: [uuid]
+      properties:
+        uuid:
+          type: integer
+        label:
+          type: string
+          description: Identifier for the requesting Server API application.
+
+    AuthorizationTokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token string returned on success.
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
+
+    # -------------------------------------------------------------------
+    # Instruments Service
+    # -------------------------------------------------------------------
+    SecurityLookupRequest:
+      type: object
+      required: [query]
+      properties:
+        query:
+          type: string
+          description: Free-text search string.
+        maxResults:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        languageOverride:
+          type: string
+          example: ENGLISH
+        yellowKeyFilter:
+          type: string
+          enum: [YK_FILTER_NONE, YK_FILTER_GOVT, YK_FILTER_CORP, YK_FILTER_MTGE, YK_FILTER_MMKT, YK_FILTER_MUNI, YK_FILTER_PFD, YK_FILTER_EQTY, YK_FILTER_CMDT, YK_FILTER_INDX, YK_FILTER_CRNCY, YK_FILTER_CLNT]
+
+    CurveLookupRequest:
+      type: object
+      required: [query]
+      properties:
+        query:
+          type: string
+        maxResults:
+          type: integer
+          default: 10
+        countryCode: { type: string }
+        currencyCode: { type: string }
+        type: { type: string }
+        subtype: { type: string }
+        curveid: { type: string }
+        bbgid: { type: string }
+
+    GovtLookupRequest:
+      type: object
+      required: [query]
+      properties:
+        query:
+          type: string
+        maxResults:
+          type: integer
+          default: 10
+        partialMatch:
+          type: boolean
+          default: true
+        ticker:
+          type: string
+
+    InstrumentLookupResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+            description: Per-instrument result. Shape varies by lookup type.
+
+  # =========================================================================
+  # Security schemes
+  # =========================================================================
+  securitySchemes:
+    desktopAPI:
+      type: apiKey
+      in: header
+      name: X-BLPAPI-Session
+      description: |
+        Desktop API authorization is handled by the local Bloomberg Professional
+        terminal. Applications open a session against `localhost:8194` and the
+        terminal context is the authorization. No token is presented over the wire.
+    serverAPI:
+      type: apiKey
+      in: header
+      name: X-BLPAPI-ASID
+      description: |
+        Server API authorization is by ASID and registered IP address.
+        The application's IP must be entitled in the Bloomberg Anywhere
+        permissioning system; an `AuthorizationRequest` with `ipAddress`
+        validates the user's identity at that location.
+    bpipeToken:
+      type: http
+      scheme: bearer
+      bearerFormat: BLPAPI-Token
+      description: |
+        B-PIPE applications acquire a token via the
+        `AuthorizationTokenRequest` operation, then submit the token in an
+        `AuthorizationRequest` to obtain an Identity object. The Identity
+        object is then attached to subsequent service requests.
+
+security:
+  - desktopAPI: []
+  - serverAPI: []
+  - bpipeToken: []

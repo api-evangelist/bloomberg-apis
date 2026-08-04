@@ -1,0 +1,30 @@
+{
+  "provider": "bloomberg-apis",
+  "sources": [
+    "bloomberg-apis-apiauth-api-openapi.yml",
+    "bloomberg-apis-apiflds-api-openapi.yml",
+    "bloomberg-apis-instruments-api-openapi.yml",
+    "bloomberg-apis-mktbar-api-openapi.yml",
+    "bloomberg-apis-mktdata-api-openapi.yml",
+    "bloomberg-apis-mktvwap-api-openapi.yml",
+    "bloomberg-apis-pagedata-api-openapi.yml",
+    "bloomberg-apis-refdata-api-openapi.yml",
+    "bloomberg-apis-tasvc-api-openapi.yml"
+  ],
+  "outputs": [
+    "bloomberg-apis-apiauth-api-openapi.yml",
+    "bloomberg-apis-apiflds-api-openapi.yml",
+    "bloomberg-apis-instruments-api-openapi.yml",
+    "bloomberg-apis-mktbar-api-openapi.yml",
+    "bloomberg-apis-mktdata-api-openapi.yml",
+    "bloomberg-apis-mktvwap-api-openapi.yml",
+    "bloomberg-apis-pagedata-api-openapi.yml",
+    "bloomberg-apis-refdata-api-openapi.yml",
+    "bloomberg-apis-tasvc-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
