@@ -1,0 +1,81 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bloomberg API (BLPAPI) apiauth API",
+    "version": "2.54"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-BLPAPI-Session",
+      "value": "{{X-BLPAPI-Session}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "apiauth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Authorize a Bloomberg user against an IP address (Server API) or token (B-PIPE)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiauth/AuthorizationRequest"
+          },
+          "docs": "Checks whether a given Bloomberg Anywhere user (UUID) is logged into\nBloomberg Professional at the specified location, and returns an\nIdentity object that subsequent requests can use to assert\npermissioning.\n\n**BLPAPI service**: `//blp/apiauth`\n**Operation**: `AuthorizationRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Check whether a UUID is logged into Bloomberg Anywhere at an IP",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiauth/LogonStatusRequest"
+          },
+          "docs": "Check whether a UUID is logged into Bloomberg Anywhere at an IP"
+        },
+        {
+          "info": {
+            "name": "List exchange entitlements for a Bloomberg user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiauth/UserEntitlementsRequest"
+          },
+          "docs": "List exchange entitlements for a Bloomberg user"
+        },
+        {
+          "info": {
+            "name": "Get exchange entitlements for one or more securities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiauth/SecurityEntitlementsRequest"
+          },
+          "docs": "Get exchange entitlements for one or more securities"
+        },
+        {
+          "info": {
+            "name": "Request an authorization token for a Server API application (B-PIPE)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiauth/AuthorizationTokenRequest"
+          },
+          "docs": "Used by B-PIPE applications to acquire a one-time token for\nauthentication. The token is then submitted via AuthorizationRequest.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bloomberg API (BLPAPI) apiauth apiflds API",
+    "version": "2.54"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-BLPAPI-Session",
+      "value": "{{X-BLPAPI-Session}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "apiflds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get field metadata by id (mnemonic or alpha-numeric identifier)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiflds/FieldInfoRequest"
+          },
+          "docs": "Returns descriptive information for one or more Bloomberg fields\nspecified by mnemonic (e.g. `LAST_PRICE`) or alpha-numeric ID\n(e.g. `pq005`). Optionally returns documentation.\n\n**BLPAPI service**: `//blp/apiflds`\n**Operation**: `FieldInfoRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Full-text search Bloomberg fields by mnemonic / description",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiflds/FieldSearchRequest"
+          },
+          "docs": "Returns fields matching a search string, optionally filtered by\ncategory, product type, and field type (Static / Real Time).\n\n**BLPAPI service**: `//blp/apiflds`\n**Operation**: `FieldSearchRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Search Bloomberg fields with results grouped by category tree",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/apiflds/CategorizedFieldSearchRequest"
+          },
+          "docs": "Returns fields matching a search string, with results arranged into\nthe Bloomberg field-category tree.\n\n**BLPAPI service**: `//blp/apiflds`\n**Operation**: `CategorizedFieldSearchRequest`\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

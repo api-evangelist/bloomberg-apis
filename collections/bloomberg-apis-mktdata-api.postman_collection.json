@@ -1,0 +1,163 @@
+{
+  "item": [
+    {
+      "id": "85520d99-0edb-4a81-a537-f2b035a80629",
+      "name": "mktdata",
+      "description": {
+        "content": "Market Data Service — streaming subscription paradigm",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1ee55479-1250-493b-aa6c-b3806d7f55b9",
+          "name": "Subscribe to streaming market data for one or more securities",
+          "request": {
+            "name": "Subscribe to streaming market data for one or more securities",
+            "description": {
+              "content": "Establishes a streaming subscription. The initial SUMMARY message\ncontains all subscribed fields; subsequent updates contain only fields\nwhose values changed.\n\n**BLPAPI service**: `//blp/mktdata`\n**Paradigm**: Subscription (delivers SUBSCRIPTION_DATA / SUBSCRIPTION_STATUS events)\n\n> Subscriptions are inherently asynchronous and stateful — this HTTP\n> shape only captures subscription initiation. The real BLPAPI client\n> attaches an EventQueue or callback that receives updates until the\n> subscription is unsubscribed.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "mktdata",
+                "subscribe"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                  "type": "any",
+                  "value": "{{session}}",
+                  "key": "session"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-blpapi-subscription"
+              },
+              {
+                "key": "Accept",
+                "value": "application/x-blpapi-event-stream"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subscriptions\": [\n    {\n      \"topic\": \"<string>\",\n      \"fields\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"options\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"correlationId\": \"<string>\"\n    },\n    {\n      \"topic\": \"<string>\",\n      \"fields\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"options\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"correlationId\": \"<string>\"\n    }\n  ]\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "26415881-9a02-4b28-8bb5-36efe45fa747",
+              "name": "Subscription accepted — updates delivered asynchronously",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "mktdata",
+                    "subscribe"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                      "type": "any",
+                      "value": "{{session}}",
+                      "key": "session"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-BLPAPI-Session",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-blpapi-event-stream"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"subscriptions\": [\n    {\n      \"topic\": \"<string>\",\n      \"fields\": [\n        \"PX_LAST\",\n        \"PX_LAST\"\n      ],\n      \"options\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"correlationId\": \"<string>\"\n    },\n    {\n      \"topic\": \"<string>\",\n      \"fields\": [\n        \"PX_LAST\",\n        \"PX_LAST\"\n      ],\n      \"options\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"correlationId\": \"<string>\"\n    }\n  ]\n}"
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-blpapi-event-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "localhost",
+      "key": "session"
+    },
+    {
+      "type": "string",
+      "value": "blpapi+session://{{session}}",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-BLPAPI-Session"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "abeccb07-ee83-4410-ba76-9c2979bfd839",
+    "name": "Bloomberg API (BLPAPI) apiauth mktdata API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Bloomberg API (BLPAPI) is the official client-side library for accessing\nBloomberg market data, reference data, news, and analytics services across\nDesktop API, Server API, and B-PIPE delivery models.\n\n> **Important — protocol shape**: The native BLPAPI is **NOT** an HTTP/REST\n> API. It is a binary, session-oriented, message-passing API delivered over\n> the Bloomberg Network using the BLPAPI client SDK (C, C++, Java, .NET, Python).\n> It uses a request/response paradigm and a subscription paradigm rather than\n> stateless HTTP verbs.\n>\n> This OpenAPI document is a **logical mapping** of the BLPAPI service and\n> schema model into HTTP-shaped operations so that:\n>\n>   - The request and response message shapes for each Bloomberg service\n>     can be discovered, indexed, and reasoned about by tooling that speaks OpenAPI.\n>   - Agents and code-generators can derive typed client wrappers around the\n>     official BLPAPI SDK.\n>   - The Bloomberg services and their operations become discoverable in\n>     APIs.json indexes alongside REST APIs.\n>\n> **It is not a runnable HTTP gateway**. Calls described here must be\n> translated into BLPAPI SDK requests against a Bloomberg session.\n>\n> For Bloomberg's REST/HTTP products (Bloomberg Data License REST API,\n> Bloomberg HAPI, Enterprise Data Catalog) refer to those products' own\n> developer portals — they are separate from BLPAPI.\n\n## Services\n\nThe BLPAPI exposes services at well-known service names:\n\n- `//blp/refdata` — Reference Data Service (request/response)\n- `//blp/mktdata` — Market Data Service (subscription)\n- `//blp/mktvwap` — Custom VWAP Service (subscription)\n- `//blp/mktbar` — Market Bar Subscription Service (subscription)\n- `//blp/apiflds` — API Field Information Service (request/response)\n- `//blp/pagedata` — Page Data Service (subscription)\n- `//blp/tasvc` — Technical Analysis Service (request/response)\n- `//blp/apiauth` — API Authorization Service (request/response)\n- `//blp/instruments` — Instruments Service (request/response)\n\nB-PIPE-only services (`//blp/mktdepthdata`, `//blp/mktlist`, `//blp/srcref`)\nare documented in the BLPAPI Developer's Guide section 9 and not modeled here.\n\n## Identifier formats\n\nSecurities follow the format `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]`\nwith optional Yellow Key (Govt, Corp, Mtge, M-Mkt, Muni, Pfd, Equity, Comdty,\nIndex, Curncy, Client). The default Topic Prefix is `ticker`. Other prefixes\ninclude `cusip`, `isin`, `sedol1`, `sedol2`, `bbgid`, `buid`, `wpk`, `sicovam`,\n`common`, `bsid`, `svm`, `cins`, `cats`.\n\nExamples: `IBM US Equity`, `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`,\n`GBPUSD BAAM Curncy`.\n\n## Auth and Permissioning\n\nBLPAPI uses Entitlement IDs (EIDs), the `//blp/apiauth` service, and Identity\nObjects to gate access to data. Three deployment-specific authorization models\napply:\n\n- **Server API** — IP-based authorization\n- **B-PIPE** — Token-based authorization with separate authentication step\n- **Desktop API** — User context derived from the Bloomberg Professional terminal\n\nSee section 6 of the Developer's Guide for details.\n\n\nContact Support:\n Name: Bloomberg Production Support",
+      "type": "text/plain"
+    }
+  }
+}

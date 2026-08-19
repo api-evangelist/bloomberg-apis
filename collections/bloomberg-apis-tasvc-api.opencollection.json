@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bloomberg API (BLPAPI) apiauth tasvc API",
+    "version": "2.54"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-BLPAPI-Session",
+      "value": "{{X-BLPAPI-Session}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "tasvc",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request a technical analysis study (historical, intraday, or real-time)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/tasvc/StudyRequest"
+          },
+          "docs": "Runs a Bloomberg technical analysis study (e.g. SMA, EMA, RSI, MACD,\nBollinger Bands, Stochastics) and returns the computed series.\nThree data types: HistoricalEndOfDay, Intraday, and Real-time.\n\n**BLPAPI service**: `//blp/tasvc`\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

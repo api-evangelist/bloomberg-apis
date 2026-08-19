@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bloomberg API (BLPAPI) apiauth pagedata API",
+    "version": "2.54"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-BLPAPI-Session",
+      "value": "{{X-BLPAPI-Session}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "pagedata",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Subscribe to a Bloomberg GPGX page",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/pagedata/subscribe"
+          },
+          "docs": "Subscribes to a GPGX page topic in the form `GPGX/MONITOR/PAGE` (e.g.\n`0708/012/0001`). Specifies which rows on the page to subscribe to.\nReceives PageUpdate (full page) and RowUpdate (partial) events.\n\n**BLPAPI service**: `//blp/pagedata`\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

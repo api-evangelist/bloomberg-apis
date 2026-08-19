@@ -1,0 +1,688 @@
+{
+  "item": [
+    {
+      "id": "cef4c553-9102-41af-8714-a48f5bff089d",
+      "name": "refdata",
+      "description": {
+        "content": "Reference Data Service operations — request/response paradigm",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "dbb9b1b2-1db0-4c69-8ff4-1aa7b56557d8",
+          "name": "Request reference data for one or more securities",
+          "request": {
+            "name": "Request reference data for one or more securities",
+            "description": {
+              "content": "Returns a snapshot of current values for a set of (security, field) pairs.\nMultiple securities and fields per request. Supports overrides,\nentitlements echo, formatted-value mode, UTC timestamps, and forced delay.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `ReferenceDataRequest`\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "refdata",
+                "ReferenceDataRequest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                  "type": "any",
+                  "value": "{{session}}",
+                  "key": "session"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-blpapi-request"
+              },
+              {
+                "key": "Accept",
+                "value": "application/x-blpapi-response"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"securities\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"fields\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"overrides\": [\n    {\n      \"fieldId\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"fieldId\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ],\n  \"returnEids\": false,\n  \"returnFormattedValue\": false,\n  \"useUTCTime\": false,\n  \"forcedDelay\": false\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "ffdd38c6-a48e-444f-85f1-af6689b00ccb",
+              "name": "ReferenceDataResponse (PARTIAL_RESPONSE or RESPONSE message)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refdata",
+                    "ReferenceDataRequest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                      "type": "any",
+                      "value": "{{session}}",
+                      "key": "session"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-BLPAPI-Session",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-blpapi-response"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"securities\": [\n    \"IBM US Equity\",\n    \"IBM US Equity\"\n  ],\n  \"fields\": [\n    \"PX_LAST\",\n    \"PX_LAST\"\n  ],\n  \"overrides\": [\n    {\n      \"fieldId\": \"PRICING_SOURCE\",\n      \"value\": \"BGN\"\n    },\n    {\n      \"fieldId\": \"PRICING_SOURCE\",\n      \"value\": \"BGN\"\n    }\n  ],\n  \"returnEids\": false,\n  \"returnFormattedValue\": false,\n  \"useUTCTime\": false,\n  \"forcedDelay\": false\n}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-blpapi-response"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f2e7ed1d-dfad-43c9-ae14-a6a0f7103460",
+          "name": "Request end-of-day historical data over a date range",
+          "request": {
+            "name": "Request end-of-day historical data over a date range",
+            "description": {
+              "content": "Retrieves end-of-day data for one or more (security, field) pairs over a\ndefined period. Supports daily, weekly, monthly, quarterly, semi-annual,\nand annual periodicity. Adjustments for splits, dividends, abnormal cash\nevents, and DPDF settings are configurable.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `HistoricalDataRequest`\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "refdata",
+                "HistoricalDataRequest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                  "type": "any",
+                  "value": "{{session}}",
+                  "key": "session"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-blpapi-request"
+              },
+              {
+                "key": "Accept",
+                "value": "application/x-blpapi-response"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"securities\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"fields\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"startDate\": \"<string>\",\n  \"endDate\": \"<string>\",\n  \"periodicityAdjustment\": \"CALENDAR\",\n  \"periodicitySelection\": \"DAILY\",\n  \"currency\": \"<string>\",\n  \"overrideOption\": \"<string>\",\n  \"pricingOption\": \"<string>\",\n  \"nonTradingDayFillOption\": \"NON_TRADING_WEEKDAYS\",\n  \"nonTradingDayFillMethod\": \"<string>\",\n  \"maxDataPoints\": \"<integer>\",\n  \"returnEids\": false,\n  \"returnRelativeDate\": false,\n  \"adjustmentNormal\": false,\n  \"adjustmentAbnormal\": false,\n  \"adjustmentSplit\": false,\n  \"adjustmentFollowDPDF\": true,\n  \"calendarCodeOverride\": \"<string>\",\n  \"calendarOverridesInfo\": {\n    \"calendarOverrides\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"calendarOverridesOperation\": \"CDR_AND\"\n  },\n  \"overrides\": [\n    {\n      \"fieldId\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"fieldId\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "7af2dba4-65bb-40b0-90b8-218217545fd9",
+              "name": "HistoricalDataResponse — one HistoricalDataTable per security",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refdata",
+                    "HistoricalDataRequest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                      "type": "any",
+                      "value": "{{session}}",
+                      "key": "session"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-BLPAPI-Session",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-blpapi-response"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"securities\": [\n    \"IBM US Equity\",\n    \"IBM US Equity\"\n  ],\n  \"fields\": [\n    \"PX_LAST\",\n    \"PX_LAST\"\n  ],\n  \"startDate\": \"20100101\",\n  \"endDate\": \"20101231\",\n  \"periodicityAdjustment\": \"CALENDAR\",\n  \"periodicitySelection\": \"DAILY\",\n  \"currency\": \"USD\",\n  \"overrideOption\": \"<string>\",\n  \"pricingOption\": \"<string>\",\n  \"nonTradingDayFillOption\": \"NON_TRADING_WEEKDAYS\",\n  \"nonTradingDayFillMethod\": \"<string>\",\n  \"maxDataPoints\": \"<integer>\",\n  \"returnEids\": false,\n  \"returnRelativeDate\": false,\n  \"adjustmentNormal\": false,\n  \"adjustmentAbnormal\": false,\n  \"adjustmentSplit\": false,\n  \"adjustmentFollowDPDF\": true,\n  \"calendarCodeOverride\": \"<string>\",\n  \"calendarOverridesInfo\": {\n    \"calendarOverrides\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"calendarOverridesOperation\": \"CDR_AND\"\n  },\n  \"overrides\": [\n    {\n      \"fieldId\": \"PRICING_SOURCE\",\n      \"value\": \"BGN\"\n    },\n    {\n      \"fieldId\": \"PRICING_SOURCE\",\n      \"value\": \"BGN\"\n    }\n  ]\n}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-blpapi-response"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f0f9725f-fd68-420c-b8e3-52bc15956575",
+          "name": "Request tick-by-tick history for a single security",
+          "request": {
+            "name": "Request tick-by-tick history for a single security",
+            "description": {
+              "content": "Returns each tick (TRADE, BID, ASK, BID_BEST, ASK_BEST, MID_PRICE,\nAT_TRADE, BEST_BID, BEST_ASK) over a defined UTC time range for one\nsecurity. Bloomberg keeps 140 days of intraday history.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `IntradayTickRequest`\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "refdata",
+                "IntradayTickRequest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                  "type": "any",
+                  "value": "{{session}}",
+                  "key": "session"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-blpapi-request"
+              },
+              {
+                "key": "Accept",
+                "value": "application/x-blpapi-response"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"security\": \"<string>\",\n  \"eventTypes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"startDateTime\": \"<dateTime>\",\n  \"endDateTime\": \"<dateTime>\",\n  \"includeConditionCodes\": false,\n  \"includeNonPlottableEvents\": false,\n  \"includeExchangeCodes\": false,\n  \"returnEids\": false,\n  \"includeBrokerCodes\": false,\n  \"includeRpsCodes\": false,\n  \"includeBicMicCodes\": false\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "997719dd-7ba8-41a3-b3ed-0b83e190aee2",
+              "name": "IntradayTickResponse with tickData array",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refdata",
+                    "IntradayTickRequest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                      "type": "any",
+                      "value": "{{session}}",
+                      "key": "session"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-BLPAPI-Session",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-blpapi-response"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"security\": \"IBM US Equity\",\n  \"eventTypes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"startDateTime\": \"<dateTime>\",\n  \"endDateTime\": \"<dateTime>\",\n  \"includeConditionCodes\": false,\n  \"includeNonPlottableEvents\": false,\n  \"includeExchangeCodes\": false,\n  \"returnEids\": false,\n  \"includeBrokerCodes\": false,\n  \"includeRpsCodes\": false,\n  \"includeBicMicCodes\": false\n}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-blpapi-response"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "efab9d4f-5808-492d-a2f4-cb7ba6fe1fd3",
+          "name": "Request intraday bar (OHLCV) history for a single security",
+          "request": {
+            "name": "Request intraday bar (OHLCV) history for a single security",
+            "description": {
+              "content": "Returns aggregated bars (OPEN/HIGH/LOW/CLOSE/VOLUME/NUMBER_OF_TICKS)\nover a defined UTC time range for a single security and event type.\nBar interval can be 1 to 1440 minutes.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `IntradayBarRequest`\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "refdata",
+                "IntradayBarRequest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                  "type": "any",
+                  "value": "{{session}}",
+                  "key": "session"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-blpapi-request"
+              },
+              {
+                "key": "Accept",
+                "value": "application/x-blpapi-response"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"security\": \"<string>\",\n  \"eventType\": \"<string>\",\n  \"startDateTime\": \"<dateTime>\",\n  \"endDateTime\": \"<dateTime>\",\n  \"interval\": \"<integer>\",\n  \"gapFillInitialBar\": false,\n  \"returnEids\": false,\n  \"adjustmentNormal\": false,\n  \"adjustmentAbnormal\": false,\n  \"adjustmentSplit\": false,\n  \"adjustmentFollowDPDF\": true\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "5898a5ab-4835-4004-930b-74d11eb61d44",
+              "name": "IntradayBarResponse with barTickData array",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refdata",
+                    "IntradayBarRequest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                      "type": "any",
+                      "value": "{{session}}",
+                      "key": "session"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-BLPAPI-Session",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-blpapi-response"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"security\": \"IBM US Equity\",\n  \"eventType\": \"<string>\",\n  \"startDateTime\": \"<dateTime>\",\n  \"endDateTime\": \"<dateTime>\",\n  \"interval\": \"<integer>\",\n  \"gapFillInitialBar\": false,\n  \"returnEids\": false,\n  \"adjustmentNormal\": false,\n  \"adjustmentAbnormal\": false,\n  \"adjustmentSplit\": false,\n  \"adjustmentFollowDPDF\": true\n}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-blpapi-response"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7fe0d960-1319-4f2b-8d8a-9180964bac0c",
+          "name": "Request portfolio positions and member data",
+          "request": {
+            "name": "Request portfolio positions and member data",
+            "description": {
+              "content": "Retrieves change information and portfolio positions for a portfolio\nidentified by Portfolio ID (from `PRTU<GO>`). Supports historical\nretrieval via the REFERENCE_DATE override.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `PortfolioDataRequest`\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "refdata",
+                "PortfolioDataRequest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                  "type": "any",
+                  "value": "{{session}}",
+                  "key": "session"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-blpapi-request"
+              },
+              {
+                "key": "Accept",
+                "value": "application/x-blpapi-response"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"securities\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"fields\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"overrides\": [\n    {\n      \"fieldId\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"fieldId\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "cfad2835-77d6-4da2-ab8a-374e3b88f5e5",
+              "name": "PortfolioDataResponse",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refdata",
+                    "PortfolioDataRequest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                      "type": "any",
+                      "value": "{{session}}",
+                      "key": "session"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-BLPAPI-Session",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-blpapi-response"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"securities\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"fields\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"overrides\": [\n    {\n      \"fieldId\": \"PRICING_SOURCE\",\n      \"value\": \"BGN\"\n    },\n    {\n      \"fieldId\": \"PRICING_SOURCE\",\n      \"value\": \"BGN\"\n    }\n  ]\n}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-blpapi-response"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f256a745-4b1e-4fea-8d35-fa3f06f22186",
+          "name": "Request data for a Bloomberg Equity Screening (EQS) screen",
+          "request": {
+            "name": "Request data for a Bloomberg Equity Screening (EQS) screen",
+            "description": {
+              "content": "Returns the security data for a screen created using `EQS <GO>` on\nthe Bloomberg Professional service. Supports private/global screens,\nlanguage selection, group filtering, and PiTDate historical access.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `BeqsRequest`\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "refdata",
+                "BeqsRequest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                  "type": "any",
+                  "value": "{{session}}",
+                  "key": "session"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-blpapi-request"
+              },
+              {
+                "key": "Accept",
+                "value": "application/x-blpapi-response"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"screenName\": \"<string>\",\n  \"screenType\": \"<string>\",\n  \"languageId\": \"<string>\",\n  \"Group\": \"<string>\",\n  \"overrides\": [\n    {\n      \"fieldId\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"fieldId\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "65a2b769-7e07-4d8f-8e5f-7910fb562bd5",
+              "name": "BeqsResponse",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refdata",
+                    "BeqsRequest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                      "type": "any",
+                      "value": "{{session}}",
+                      "key": "session"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-BLPAPI-Session",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-blpapi-response"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"screenName\": \"Global Volume Surges\",\n  \"screenType\": \"<string>\",\n  \"languageId\": \"<string>\",\n  \"Group\": \"<string>\",\n  \"overrides\": [\n    {\n      \"fieldId\": \"PRICING_SOURCE\",\n      \"value\": \"BGN\"\n    },\n    {\n      \"fieldId\": \"PRICING_SOURCE\",\n      \"value\": \"BGN\"\n    }\n  ]\n}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-blpapi-response"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "localhost",
+      "key": "session"
+    },
+    {
+      "type": "string",
+      "value": "blpapi+session://{{session}}",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-BLPAPI-Session"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "07c32578-f78b-4deb-a8ba-a0662842e277",
+    "name": "Bloomberg API (BLPAPI) apiauth refdata API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Bloomberg API (BLPAPI) is the official client-side library for accessing\nBloomberg market data, reference data, news, and analytics services across\nDesktop API, Server API, and B-PIPE delivery models.\n\n> **Important — protocol shape**: The native BLPAPI is **NOT** an HTTP/REST\n> API. It is a binary, session-oriented, message-passing API delivered over\n> the Bloomberg Network using the BLPAPI client SDK (C, C++, Java, .NET, Python).\n> It uses a request/response paradigm and a subscription paradigm rather than\n> stateless HTTP verbs.\n>\n> This OpenAPI document is a **logical mapping** of the BLPAPI service and\n> schema model into HTTP-shaped operations so that:\n>\n>   - The request and response message shapes for each Bloomberg service\n>     can be discovered, indexed, and reasoned about by tooling that speaks OpenAPI.\n>   - Agents and code-generators can derive typed client wrappers around the\n>     official BLPAPI SDK.\n>   - The Bloomberg services and their operations become discoverable in\n>     APIs.json indexes alongside REST APIs.\n>\n> **It is not a runnable HTTP gateway**. Calls described here must be\n> translated into BLPAPI SDK requests against a Bloomberg session.\n>\n> For Bloomberg's REST/HTTP products (Bloomberg Data License REST API,\n> Bloomberg HAPI, Enterprise Data Catalog) refer to those products' own\n> developer portals — they are separate from BLPAPI.\n\n## Services\n\nThe BLPAPI exposes services at well-known service names:\n\n- `//blp/refdata` — Reference Data Service (request/response)\n- `//blp/mktdata` — Market Data Service (subscription)\n- `//blp/mktvwap` — Custom VWAP Service (subscription)\n- `//blp/mktbar` — Market Bar Subscription Service (subscription)\n- `//blp/apiflds` — API Field Information Service (request/response)\n- `//blp/pagedata` — Page Data Service (subscription)\n- `//blp/tasvc` — Technical Analysis Service (request/response)\n- `//blp/apiauth` — API Authorization Service (request/response)\n- `//blp/instruments` — Instruments Service (request/response)\n\nB-PIPE-only services (`//blp/mktdepthdata`, `//blp/mktlist`, `//blp/srcref`)\nare documented in the BLPAPI Developer's Guide section 9 and not modeled here.\n\n## Identifier formats\n\nSecurities follow the format `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]`\nwith optional Yellow Key (Govt, Corp, Mtge, M-Mkt, Muni, Pfd, Equity, Comdty,\nIndex, Curncy, Client). The default Topic Prefix is `ticker`. Other prefixes\ninclude `cusip`, `isin`, `sedol1`, `sedol2`, `bbgid`, `buid`, `wpk`, `sicovam`,\n`common`, `bsid`, `svm`, `cins`, `cats`.\n\nExamples: `IBM US Equity`, `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`,\n`GBPUSD BAAM Curncy`.\n\n## Auth and Permissioning\n\nBLPAPI uses Entitlement IDs (EIDs), the `//blp/apiauth` service, and Identity\nObjects to gate access to data. Three deployment-specific authorization models\napply:\n\n- **Server API** — IP-based authorization\n- **B-PIPE** — Token-based authorization with separate authentication step\n- **Desktop API** — User context derived from the Bloomberg Professional terminal\n\nSee section 6 of the Developer's Guide for details.\n\n\nContact Support:\n Name: Bloomberg Production Support",
+      "type": "text/plain"
+    }
+  }
+}

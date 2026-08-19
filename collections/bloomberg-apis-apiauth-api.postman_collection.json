@@ -1,0 +1,574 @@
+{
+  "item": [
+    {
+      "id": "b9de9a08-ff5f-43bd-b479-ec3c1907ba62",
+      "name": "apiauth",
+      "description": {
+        "content": "API Authorization Service — entitlements and identity",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a63e0e07-f765-4808-b76c-9189dbf99edb",
+          "name": "Authorize a Bloomberg user against an IP address (Server API) or token (B-PIPE)",
+          "request": {
+            "name": "Authorize a Bloomberg user against an IP address (Server API) or token (B-PIPE)",
+            "description": {
+              "content": "Checks whether a given Bloomberg Anywhere user (UUID) is logged into\nBloomberg Professional at the specified location, and returns an\nIdentity object that subsequent requests can use to assert\npermissioning.\n\n**BLPAPI service**: `//blp/apiauth`\n**Operation**: `AuthorizationRequest`\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "apiauth",
+                "AuthorizationRequest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                  "type": "any",
+                  "value": "{{session}}",
+                  "key": "session"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-blpapi-request"
+              },
+              {
+                "key": "Accept",
+                "value": "application/x-blpapi-response"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"uuid\": \"<integer>\",\n  \"ipAddress\": \"<string>\",\n  \"token\": \"<string>\",\n  \"requireAsidEquivalence\": false\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "10098eed-ecb6-4d03-95a7-8c45ea9af68a",
+              "name": "AuthorizationSuccess or AuthorizationFailure",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "apiauth",
+                    "AuthorizationRequest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                      "type": "any",
+                      "value": "{{session}}",
+                      "key": "session"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-BLPAPI-Session",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-blpapi-response"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"uuid\": 11223344,\n  \"ipAddress\": \"111.22.33.44\",\n  \"token\": \"<string>\",\n  \"requireAsidEquivalence\": false\n}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-blpapi-response"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "04ebc87f-a9f0-49f0-ae75-3033f542daf9",
+          "name": "Check whether a UUID is logged into Bloomberg Anywhere at an IP",
+          "request": {
+            "name": "Check whether a UUID is logged into Bloomberg Anywhere at an IP",
+            "description": {},
+            "url": {
+              "path": [
+                "apiauth",
+                "LogonStatusRequest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                  "type": "any",
+                  "value": "{{session}}",
+                  "key": "session"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-blpapi-request"
+              },
+              {
+                "key": "Accept",
+                "value": "application/x-blpapi-response"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"uuid\": \"<integer>\",\n  \"ipAddress\": \"<string>\"\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "6a9daaa3-37fa-4d48-9a30-a00bedb670e3",
+              "name": "LogonStatusResponse with `isLoggedOn` boolean",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "apiauth",
+                    "LogonStatusRequest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                      "type": "any",
+                      "value": "{{session}}",
+                      "key": "session"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-BLPAPI-Session",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-blpapi-response"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"uuid\": \"<integer>\",\n  \"ipAddress\": \"<string>\"\n}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-blpapi-response"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c6e60174-ada5-49b7-abde-c7cb26a6c623",
+          "name": "List exchange entitlements for a Bloomberg user",
+          "request": {
+            "name": "List exchange entitlements for a Bloomberg user",
+            "description": {},
+            "url": {
+              "path": [
+                "apiauth",
+                "UserEntitlementsRequest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                  "type": "any",
+                  "value": "{{session}}",
+                  "key": "session"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-blpapi-request"
+              },
+              {
+                "key": "Accept",
+                "value": "application/x-blpapi-response"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"uuid\": \"<integer>\"\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "88900d13-7fc2-44f3-82fa-4d7a894d0167",
+              "name": "UserEntitlementsResponse with EID array",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "apiauth",
+                    "UserEntitlementsRequest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                      "type": "any",
+                      "value": "{{session}}",
+                      "key": "session"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-BLPAPI-Session",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-blpapi-response"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"uuid\": \"<integer>\"\n}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-blpapi-response"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "33e4a14b-e04f-4132-92d4-80a0c6ce940c",
+          "name": "Get exchange entitlements for one or more securities",
+          "request": {
+            "name": "Get exchange entitlements for one or more securities",
+            "description": {},
+            "url": {
+              "path": [
+                "apiauth",
+                "SecurityEntitlementsRequest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                  "type": "any",
+                  "value": "{{session}}",
+                  "key": "session"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-blpapi-request"
+              },
+              {
+                "key": "Accept",
+                "value": "application/x-blpapi-response"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"securities\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "46f9277c-8704-436b-86c4-ff14c3cc07dd",
+              "name": "SecurityEntitlementsResponse with per-security EID array",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "apiauth",
+                    "SecurityEntitlementsRequest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                      "type": "any",
+                      "value": "{{session}}",
+                      "key": "session"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-BLPAPI-Session",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-blpapi-response"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"securities\": [\n    \"IBM US Equity\",\n    \"IBM US Equity\"\n  ]\n}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-blpapi-response"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e93c0625-5f18-4e38-9f96-d449628a9e51",
+          "name": "Request an authorization token for a Server API application (B-PIPE)",
+          "request": {
+            "name": "Request an authorization token for a Server API application (B-PIPE)",
+            "description": {
+              "content": "Used by B-PIPE applications to acquire a one-time token for\nauthentication. The token is then submitted via AuthorizationRequest.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "apiauth",
+                "AuthorizationTokenRequest"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                  "type": "any",
+                  "value": "{{session}}",
+                  "key": "session"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-blpapi-request"
+              },
+              {
+                "key": "Accept",
+                "value": "application/x-blpapi-response"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"uuid\": \"<integer>\",\n  \"label\": \"<string>\"\n}"
+            }
+          },
+          "response": [
+            {
+              "id": "4d354946-7b94-429e-842e-16131bf08e0b",
+              "name": "AuthorizationTokenResponse (or responseError on failure)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "apiauth",
+                    "AuthorizationTokenRequest"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+                      "type": "any",
+                      "value": "{{session}}",
+                      "key": "session"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-BLPAPI-Session",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-blpapi-response"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"uuid\": \"<integer>\",\n  \"label\": \"<string>\"\n}"
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-blpapi-response"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Session identifier — Desktop, Server API ASID, or B-PIPE BPID",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "localhost",
+      "key": "session"
+    },
+    {
+      "type": "string",
+      "value": "blpapi+session://{{session}}",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-BLPAPI-Session"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "13e03180-4a94-415d-8679-987657c0e18d",
+    "name": "Bloomberg API (BLPAPI) apiauth API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Bloomberg API (BLPAPI) is the official client-side library for accessing\nBloomberg market data, reference data, news, and analytics services across\nDesktop API, Server API, and B-PIPE delivery models.\n\n> **Important — protocol shape**: The native BLPAPI is **NOT** an HTTP/REST\n> API. It is a binary, session-oriented, message-passing API delivered over\n> the Bloomberg Network using the BLPAPI client SDK (C, C++, Java, .NET, Python).\n> It uses a request/response paradigm and a subscription paradigm rather than\n> stateless HTTP verbs.\n>\n> This OpenAPI document is a **logical mapping** of the BLPAPI service and\n> schema model into HTTP-shaped operations so that:\n>\n>   - The request and response message shapes for each Bloomberg service\n>     can be discovered, indexed, and reasoned about by tooling that speaks OpenAPI.\n>   - Agents and code-generators can derive typed client wrappers around the\n>     official BLPAPI SDK.\n>   - The Bloomberg services and their operations become discoverable in\n>     APIs.json indexes alongside REST APIs.\n>\n> **It is not a runnable HTTP gateway**. Calls described here must be\n> translated into BLPAPI SDK requests against a Bloomberg session.\n>\n> For Bloomberg's REST/HTTP products (Bloomberg Data License REST API,\n> Bloomberg HAPI, Enterprise Data Catalog) refer to those products' own\n> developer portals — they are separate from BLPAPI.\n\n## Services\n\nThe BLPAPI exposes services at well-known service names:\n\n- `//blp/refdata` — Reference Data Service (request/response)\n- `//blp/mktdata` — Market Data Service (subscription)\n- `//blp/mktvwap` — Custom VWAP Service (subscription)\n- `//blp/mktbar` — Market Bar Subscription Service (subscription)\n- `//blp/apiflds` — API Field Information Service (request/response)\n- `//blp/pagedata` — Page Data Service (subscription)\n- `//blp/tasvc` — Technical Analysis Service (request/response)\n- `//blp/apiauth` — API Authorization Service (request/response)\n- `//blp/instruments` — Instruments Service (request/response)\n\nB-PIPE-only services (`//blp/mktdepthdata`, `//blp/mktlist`, `//blp/srcref`)\nare documented in the BLPAPI Developer's Guide section 9 and not modeled here.\n\n## Identifier formats\n\nSecurities follow the format `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]`\nwith optional Yellow Key (Govt, Corp, Mtge, M-Mkt, Muni, Pfd, Equity, Comdty,\nIndex, Curncy, Client). The default Topic Prefix is `ticker`. Other prefixes\ninclude `cusip`, `isin`, `sedol1`, `sedol2`, `bbgid`, `buid`, `wpk`, `sicovam`,\n`common`, `bsid`, `svm`, `cins`, `cats`.\n\nExamples: `IBM US Equity`, `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`,\n`GBPUSD BAAM Curncy`.\n\n## Auth and Permissioning\n\nBLPAPI uses Entitlement IDs (EIDs), the `//blp/apiauth` service, and Identity\nObjects to gate access to data. Three deployment-specific authorization models\napply:\n\n- **Server API** — IP-based authorization\n- **B-PIPE** — Token-based authorization with separate authentication step\n- **Desktop API** — User context derived from the Bloomberg Professional terminal\n\nSee section 6 of the Developer's Guide for details.\n\n\nContact Support:\n Name: Bloomberg Production Support",
+      "type": "text/plain"
+    }
+  }
+}

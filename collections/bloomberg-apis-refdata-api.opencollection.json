@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bloomberg API (BLPAPI) apiauth refdata API",
+    "version": "2.54"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-BLPAPI-Session",
+      "value": "{{X-BLPAPI-Session}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "refdata",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request reference data for one or more securities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/refdata/ReferenceDataRequest"
+          },
+          "docs": "Returns a snapshot of current values for a set of (security, field) pairs.\nMultiple securities and fields per request. Supports overrides,\nentitlements echo, formatted-value mode, UTC timestamps, and forced delay.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `ReferenceDataRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Request end-of-day historical data over a date range",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/refdata/HistoricalDataRequest"
+          },
+          "docs": "Retrieves end-of-day data for one or more (security, field) pairs over a\ndefined period. Supports daily, weekly, monthly, quarterly, semi-annual,\nand annual periodicity. Adjustments for splits, dividends, abnormal cash\nevents, and DPDF settings are configurable.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `HistoricalDataRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Request tick-by-tick history for a single security",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/refdata/IntradayTickRequest"
+          },
+          "docs": "Returns each tick (TRADE, BID, ASK, BID_BEST, ASK_BEST, MID_PRICE,\nAT_TRADE, BEST_BID, BEST_ASK) over a defined UTC time range for one\nsecurity. Bloomberg keeps 140 days of intraday history.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `IntradayTickRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Request intraday bar (OHLCV) history for a single security",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/refdata/IntradayBarRequest"
+          },
+          "docs": "Returns aggregated bars (OPEN/HIGH/LOW/CLOSE/VOLUME/NUMBER_OF_TICKS)\nover a defined UTC time range for a single security and event type.\nBar interval can be 1 to 1440 minutes.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `IntradayBarRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Request portfolio positions and member data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/refdata/PortfolioDataRequest"
+          },
+          "docs": "Retrieves change information and portfolio positions for a portfolio\nidentified by Portfolio ID (from `PRTU<GO>`). Supports historical\nretrieval via the REFERENCE_DATE override.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `PortfolioDataRequest`\n"
+        },
+        {
+          "info": {
+            "name": "Request data for a Bloomberg Equity Screening (EQS) screen",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/refdata/BeqsRequest"
+          },
+          "docs": "Returns the security data for a screen created using `EQS <GO>` on\nthe Bloomberg Professional service. Supports private/global screens,\nlanguage selection, group filtering, and PiTDate historical access.\n\n**BLPAPI service**: `//blp/refdata`\n**Operation**: `BeqsRequest`\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

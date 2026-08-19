@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bloomberg API (BLPAPI) apiauth mktdata API",
+    "version": "2.54"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-BLPAPI-Session",
+      "value": "{{X-BLPAPI-Session}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "mktdata",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Subscribe to streaming market data for one or more securities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/mktdata/subscribe"
+          },
+          "docs": "Establishes a streaming subscription. The initial SUMMARY message\ncontains all subscribed fields; subsequent updates contain only fields\nwhose values changed.\n\n**BLPAPI service**: `//blp/mktdata`\n**Paradigm**: Subscription (delivers SUBSCRIPTION_DATA / SUBSCRIPTION_STATUS events)\n\n> Subscriptions are inherently asynchronous and stateful — this HTTP\n> shape only captures subscription initiation. The real BLPAPI client\n> attaches an EventQueue or callback that receives updates until the\n> subscrip"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

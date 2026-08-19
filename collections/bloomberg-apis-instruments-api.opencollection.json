@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bloomberg API (BLPAPI) apiauth instruments API",
+    "version": "2.54"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-BLPAPI-Session",
+      "value": "{{X-BLPAPI-Session}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "instruments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Look up securities by free-text query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/instruments/SecurityLookupRequest"
+          },
+          "docs": "Searches Bloomberg's instrument universe by ticker / name. Returns\ncandidate securities with their full Bloomberg identifiers.\n\n**BLPAPI service**: `//blp/instruments`\n"
+        },
+        {
+          "info": {
+            "name": "Look up Bloomberg yield curves",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/instruments/CurveLookupRequest"
+          },
+          "docs": "Look up Bloomberg yield curves"
+        },
+        {
+          "info": {
+            "name": "Look up government securities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/instruments/GovtLookupRequest"
+          },
+          "docs": "Look up government securities"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bloomberg API (BLPAPI) apiauth mktbar API",
+    "version": "2.54"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-BLPAPI-Session",
+      "value": "{{X-BLPAPI-Session}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "mktbar",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Subscribe to streaming intraday bar data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "blpapi+session://{session}/mktbar/subscribe"
+          },
+          "docs": "Establishes a subscription that delivers bucketized OHLCV bars at a\nconfigurable interval. Topic format:\n`//blp/mktbar/SYMBOLOGY/SECURITY?START_TIME=st&END_TIME=et&BAR_SIZE=bz`\n\nDelivers MarketBarStart, MarketBarUpdate, MarketBarIntervalEnd,\nand MarketBarEnd events.\n\n**BLPAPI service**: `//blp/mktbar`\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
