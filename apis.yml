@@ -3,6 +3,18 @@ name: Bloomberg APIs
 description: Collection of Bloomberg's financial data and news APIs for accessing market data, news content, data
   licensing, and enterprise connectivity.
 type: Index
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
