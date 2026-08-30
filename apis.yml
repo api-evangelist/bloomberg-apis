@@ -81,7 +81,7 @@ apis:
   description: API Authorization Service — entitlements and identity
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
-  - Api Auth
+  - apiauth
   tags_raw:
   - apiauth
   properties:
@@ -101,7 +101,7 @@ apis:
   description: Instruments Service — security/curve/government lookups
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
-  - Instruments
+  - instruments
   tags_raw:
   - instruments
   properties:
