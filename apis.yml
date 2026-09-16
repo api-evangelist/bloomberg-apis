@@ -1,7 +1,7 @@
 aid: bloomberg-apis
 name: Bloomberg APIs
-description: Collection of Bloomberg's financial data and news APIs for accessing market data, news content, data
-  licensing, and enterprise connectivity.
+description: Collection of Bloomberg's financial data and news APIs for accessing market data, news content,
+  data licensing, and enterprise connectivity.
 type: Index
 deliveryModel:
   model: saas
@@ -38,7 +38,7 @@ tags:
 - Terminal
 url: https://raw.githubusercontent.com/api-evangelist/bloomberg-apis/refs/heads/main/apis.yml
 created: '2024-01-01'
-modified: '2026-08-27'
+modified: '2026-09-16'
 specificationVersion: '0.23'
 apis:
 - aid: bloomberg-apis:bloomberg-market-data-feed
@@ -163,6 +163,8 @@ apis:
   - type: OpenAPI
     url: openapi/bloomberg-apis-tasvc-api-openapi.yml
 common:
+- type: Website
+  url: https://bloomberg.com
 - type: ParentCompany
   url: https://apis.io/providers/bloomberg/
   name: Bloomberg
