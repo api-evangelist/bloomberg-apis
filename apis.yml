@@ -43,7 +43,8 @@ specificationVersion: '0.23'
 apis:
 - aid: bloomberg-apis:bloomberg-market-data-feed
   name: Bloomberg Market Data Feed
-  description: Real-time and historical market data for equities, fixed income, commodities, and currencies.
+  description: >-
+    Real-time and historical market data for equities, fixed income, commodities, and currencies.
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
   - Equities
@@ -77,17 +78,6 @@ apis:
   properties:
   - type: Documentation
     url: https://www.bloomberg.com/professional/products/data/data-management/data-license/
-- aid: bloomberg-apis:bloomberg-apis-apiauth-api
-  name: Bloomberg APIs apiauth API
-  description: API Authorization Service — entitlements and identity
-  humanURL: https://www.bloomberg.com/professional/support/api-library/
-  tags:
-  - Api Auth
-  tags_raw:
-  - apiauth
-  properties:
-  - type: OpenAPI
-    url: openapi/bloomberg-apis-apiauth-api-openapi.yml
 - aid: bloomberg-apis:bloomberg-apis-apiflds-api
   name: Bloomberg APIs apiflds API
   description: API Field Information Service — discover and search Bloomberg fields
@@ -144,15 +134,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/bloomberg-apis-pagedata-api-openapi.yml
-- aid: bloomberg-apis:bloomberg-apis-refdata-api
-  name: Bloomberg APIs refdata API
-  description: Reference Data Service operations — request/response paradigm
-  humanURL: https://www.bloomberg.com/professional/support/api-library/
-  tags:
-  - refdata
-  properties:
-  - type: OpenAPI
-    url: openapi/bloomberg-apis-refdata-api-openapi.yml
 - aid: bloomberg-apis:bloomberg-apis-tasvc-api
   name: Bloomberg APIs tasvc API
   description: Technical Analysis Service — historical, intraday, and real-time studies
@@ -162,6 +143,24 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/bloomberg-apis-tasvc-api-openapi.yml
+- aid: bloomberg-apis:bloomberg-apis-api-auth-api
+  name: Bloomberg APIs API Auth API
+  description: API Authorization Service — entitlements and identity
+  humanURL: https://www.bloomberg.com/professional/support/api-library/
+  tags:
+  - API Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/bloomberg-apis-api-auth-api-openapi.yml
+- aid: bloomberg-apis:bloomberg-apis-ref-data-api
+  name: Bloomberg APIs Ref Data API
+  description: Reference Data Service operations — request/response paradigm
+  humanURL: https://www.bloomberg.com/professional/support/api-library/
+  tags:
+  - Ref Data
+  properties:
+  - type: OpenAPI
+    url: openapi/bloomberg-apis-ref-data-api-openapi.yml
 common:
 - type: Website
   url: https://bloomberg.com
