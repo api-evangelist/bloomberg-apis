@@ -47,6 +47,11 @@ apis:
     Real-time and historical market data for equities, fixed income, commodities, and currencies.
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
+  - Stocks
+  - Fixed Income
+  - Market Data
+  - Real-Time
+  tags_raw:
   - Equities
   - Fixed Income
   - Market Data
@@ -157,6 +162,8 @@ apis:
   description: Reference Data Service operations — request/response paradigm
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
+  - Ref-Data
+  tags_raw:
   - Ref Data
   properties:
   - type: OpenAPI
