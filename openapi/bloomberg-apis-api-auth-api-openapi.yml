@@ -1,129 +1,13 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Bloomberg API (BLPAPI) apiauth API
+  title: Bloomberg API (BLPAPI) Apiauth API
   version: '2.54'
   summary: Logical OpenAPI representation of the Bloomberg API (BLPAPI) v3.x
   description: 'The Bloomberg API (BLPAPI) is the official client-side library for accessing
 
     Bloomberg market data, reference data, news, and analytics services across
 
-    Desktop API, Server API, and B-PIPE delivery models.
-
-
-    > **Important — protocol shape**: The native BLPAPI is **NOT** an HTTP/REST
-
-    > API. It is a binary, session-oriented, message-passing API delivered over
-
-    > the Bloomberg Network using the BLPAPI client SDK (C, C++, Java, .NET, Python).
-
-    > It uses a request/response paradigm and a subscription paradigm rather than
-
-    > stateless HTTP verbs.
-
-    >
-
-    > This OpenAPI document is a **logical mapping** of the BLPAPI service and
-
-    > schema model into HTTP-shaped operations so that:
-
-    >
-
-    >   - The request and response message shapes for each Bloomberg service
-
-    >     can be discovered, indexed, and reasoned about by tooling that speaks OpenAPI.
-
-    >   - Agents and code-generators can derive typed client wrappers around the
-
-    >     official BLPAPI SDK.
-
-    >   - The Bloomberg services and their operations become discoverable in
-
-    >     APIs.json indexes alongside REST APIs.
-
-    >
-
-    > **It is not a runnable HTTP gateway**. Calls described here must be
-
-    > translated into BLPAPI SDK requests against a Bloomberg session.
-
-    >
-
-    > For Bloomberg''s REST/HTTP products (Bloomberg Data License REST API,
-
-    > Bloomberg HAPI, Enterprise Data Catalog) refer to those products'' own
-
-    > developer portals — they are separate from BLPAPI.
-
-
-    ## Services
-
-
-    The BLPAPI exposes services at well-known service names:
-
-
-    - `//blp/refdata` — Reference Data Service (request/response)
-
-    - `//blp/mktdata` — Market Data Service (subscription)
-
-    - `//blp/mktvwap` — Custom VWAP Service (subscription)
-
-    - `//blp/mktbar` — Market Bar Subscription Service (subscription)
-
-    - `//blp/apiflds` — API Field Information Service (request/response)
-
-    - `//blp/pagedata` — Page Data Service (subscription)
-
-    - `//blp/tasvc` — Technical Analysis Service (request/response)
-
-    - `//blp/apiauth` — API Authorization Service (request/response)
-
-    - `//blp/instruments` — Instruments Service (request/response)
-
-
-    B-PIPE-only services (`//blp/mktdepthdata`, `//blp/mktlist`, `//blp/srcref`)
-
-    are documented in the BLPAPI Developer''s Guide section 9 and not modeled here.
-
-
-    ## Identifier formats
-
-
-    Securities follow the format `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]`
-
-    with optional Yellow Key (Govt, Corp, Mtge, M-Mkt, Muni, Pfd, Equity, Comdty,
-
-    Index, Curncy, Client). The default Topic Prefix is `ticker`. Other prefixes
-
-    include `cusip`, `isin`, `sedol1`, `sedol2`, `bbgid`, `buid`, `wpk`, `sicovam`,
-
-    `common`, `bsid`, `svm`, `cins`, `cats`.
-
-
-    Examples: `IBM US Equity`, `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`,
-
-    `GBPUSD BAAM Curncy`.
-
-
-    ## Auth and Permissioning
-
-
-    BLPAPI uses Entitlement IDs (EIDs), the `//blp/apiauth` service, and Identity
-
-    Objects to gate access to data. Three deployment-specific authorization models
-
-    apply:
-
-
-    - **Server API** — IP-based authorization
-
-    - **B-PIPE** — Token-based authorization with separate authentication step
-
-    - **Desktop API** — User context derived from the Bloomberg Professional terminal
-
-
-    See section 6 of the Developer''s Guide for details.
-
-    '
+    Desktop API, Server API, and B-PIPE delivery models.'
   contact:
     name: Bloomberg Production Support
     url: https://www.bloomberg.com/professional/support/
@@ -150,14 +34,14 @@ security:
 - serverAPI: []
 - bpipeToken: []
 tags:
-- name: apiauth
+- name: API Auth
   description: API Authorization Service — entitlements and identity
 paths:
   /apiauth/AuthorizationRequest:
     post:
       operationId: authorizationRequest
       tags:
-      - apiauth
+      - API Auth
       summary: Authorize a Bloomberg user against an IP address (Server API) or token (B-PIPE)
       description: 'Checks whether a given Bloomberg Anywhere user (UUID) is logged into
 
@@ -170,9 +54,7 @@ paths:
 
         **BLPAPI service**: `//blp/apiauth`
 
-        **Operation**: `AuthorizationRequest`
-
-        '
+        **Operation**: `AuthorizationRequest`'
       requestBody:
         required: true
         content:
@@ -190,7 +72,7 @@ paths:
     post:
       operationId: logonStatusRequest
       tags:
-      - apiauth
+      - API Auth
       summary: Check whether a UUID is logged into Bloomberg Anywhere at an IP
       requestBody:
         required: true
@@ -209,7 +91,7 @@ paths:
     post:
       operationId: userEntitlementsRequest
       tags:
-      - apiauth
+      - API Auth
       summary: List exchange entitlements for a Bloomberg user
       requestBody:
         required: true
@@ -228,7 +110,7 @@ paths:
     post:
       operationId: securityEntitlementsRequest
       tags:
-      - apiauth
+      - API Auth
       summary: Get exchange entitlements for one or more securities
       requestBody:
         required: true
@@ -247,13 +129,11 @@ paths:
     post:
       operationId: authorizationTokenRequest
       tags:
-      - apiauth
+      - API Auth
       summary: Request an authorization token for a Server API application (B-PIPE)
       description: 'Used by B-PIPE applications to acquire a one-time token for
 
-        authentication. The token is then submitted via AuthorizationRequest.
-
-        '
+        authentication. The token is then submitted via AuthorizationRequest.'
       requestBody:
         required: true
         content:
@@ -269,36 +149,25 @@ paths:
                 $ref: '#/components/schemas/AuthorizationTokenResponse'
 components:
   schemas:
-    Security:
-      type: string
-      description: 'Bloomberg security identifier in the form
-
-        `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]` with optional Yellow Key.
-
-        Default Topic Prefix is `ticker`. Examples: `IBM US Equity`,
-
-        `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`.
-
-        '
-      examples:
-      - IBM US Equity
-      - VOD LN Equity
-      - /cusip/912828GM6@BGN
-      - MSFT@ETPX US Equity
-      - GBPUSD BAAM Curncy
-    AuthorizationResponse:
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/AuthorizationSuccess'
-      - $ref: '#/components/schemas/AuthorizationFailure'
-    AuthorizationTokenResponse:
+    SecurityEntitlementsResponse:
       type: object
       properties:
-        token:
-          type: string
-          description: Token string returned on success.
-        responseError:
-          $ref: '#/components/schemas/ErrorInfo'
+        eidData:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: integer
+              sequenceNumber:
+                type: integer
+              eids:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    entitlementId:
+                      type: integer
     AuthorizationRequest:
       type: object
       properties:
@@ -327,50 +196,19 @@ components:
             '
           deprecated: true
           default: false
-    SecurityEntitlementsResponse:
+    AuthorizationResponse:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/AuthorizationSuccess'
+      - $ref: '#/components/schemas/AuthorizationFailure'
+    AuthorizationFailure:
       type: object
       properties:
-        eidData:
-          type: array
-          items:
-            type: object
-            properties:
-              status:
-                type: integer
-              sequenceNumber:
-                type: integer
-              eids:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    entitlementId:
-                      type: integer
-    UserEntitlementsResponse:
-      type: object
-      properties:
-        eids:
-          type: array
-          items:
-            type: object
-            properties:
-              entitlementId:
-                type: integer
-    AuthorizationSuccess:
-      type: object
-      properties:
-        AuthorizationSuccess:
+        AuthorizationFailure:
           type: object
-          description: Empty success indicator. Identity object returned on the wire.
-    SecurityEntitlementsRequest:
-      type: object
-      required:
-      - securities
-      properties:
-        securities:
-          type: array
-          items:
-            $ref: '#/components/schemas/Security'
+          properties:
+            reason:
+              $ref: '#/components/schemas/ErrorInfo'
     ErrorInfo:
       type: object
       description: Standard error envelope used in BLPAPI responses.
@@ -400,37 +238,37 @@ components:
         subcategory:
           type: string
           description: (Optional) more specific classification of the failure.
-    UserEntitlementsRequest:
+    AuthorizationSuccess:
       type: object
-      required:
-      - uuid
       properties:
-        uuid:
-          type: integer
+        AuthorizationSuccess:
+          type: object
+          description: Empty success indicator. Identity object returned on the wire.
+    UserEntitlementsResponse:
+      type: object
+      properties:
+        eids:
+          type: array
+          items:
+            type: object
+            properties:
+              entitlementId:
+                type: integer
     LogonStatusResponse:
       type: object
       properties:
         isLoggedOn:
           type: boolean
           description: True when the UUID is logged into Bloomberg Professional at the IP.
-    AuthorizationTokenRequest:
+    SecurityEntitlementsRequest:
       type: object
       required:
-      - uuid
+      - securities
       properties:
-        uuid:
-          type: integer
-        label:
-          type: string
-          description: Identifier for the requesting Server API application.
-    AuthorizationFailure:
-      type: object
-      properties:
-        AuthorizationFailure:
-          type: object
-          properties:
-            reason:
-              $ref: '#/components/schemas/ErrorInfo'
+        securities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Security'
     LogonStatusRequest:
       type: object
       required:
@@ -441,6 +279,48 @@ components:
           type: integer
         ipAddress:
           type: string
+    UserEntitlementsRequest:
+      type: object
+      required:
+      - uuid
+      properties:
+        uuid:
+          type: integer
+    AuthorizationTokenRequest:
+      type: object
+      required:
+      - uuid
+      properties:
+        uuid:
+          type: integer
+        label:
+          type: string
+          description: Identifier for the requesting Server API application.
+    Security:
+      type: string
+      description: 'Bloomberg security identifier in the form
+
+        `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]` with optional Yellow Key.
+
+        Default Topic Prefix is `ticker`. Examples: `IBM US Equity`,
+
+        `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`.
+
+        '
+      examples:
+      - IBM US Equity
+      - VOD LN Equity
+      - /cusip/912828GM6@BGN
+      - MSFT@ETPX US Equity
+      - GBPUSD BAAM Curncy
+    AuthorizationTokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token string returned on success.
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
   securitySchemes:
     desktopAPI:
       type: apiKey

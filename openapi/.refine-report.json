@@ -1,15 +1,7 @@
 {
   "provider": "bloomberg-apis",
   "sources": [
-    "bloomberg-apis-apiauth-api-openapi.yml",
-    "bloomberg-apis-apiflds-api-openapi.yml",
-    "bloomberg-apis-instruments-api-openapi.yml",
-    "bloomberg-apis-mktbar-api-openapi.yml",
-    "bloomberg-apis-mktdata-api-openapi.yml",
-    "bloomberg-apis-mktvwap-api-openapi.yml",
-    "bloomberg-apis-pagedata-api-openapi.yml",
-    "bloomberg-apis-refdata-api-openapi.yml",
-    "bloomberg-apis-tasvc-api-openapi.yml"
+    "_original/bloomberg-blpapi-openapi.yml"
   ],
   "outputs": [
     "bloomberg-apis-apiauth-api-openapi.yml",
@@ -22,9 +14,26 @@
     "bloomberg-apis-refdata-api-openapi.yml",
     "bloomberg-apis-tasvc-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 2 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "bloomberg-blpapi-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "superseded outputs removed: bloomberg-apis-api-auth-api-openapi.yml, bloomberg-apis-ref-data-api-openapi.yml",
+    "apis.yml register: written (+2 apis, 12 total)"
+  ],
+  "skipped": [
+    "bloomberg-apis-api-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bloomberg-apis-apiflds-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bloomberg-apis-instruments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bloomberg-apis-mktbar-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bloomberg-apis-mktdata-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bloomberg-apis-mktvwap-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bloomberg-apis-pagedata-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bloomberg-apis-ref-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "bloomberg-apis-tasvc-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

@@ -1,129 +1,13 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Bloomberg API (BLPAPI) apiauth mktdata API
+  title: Bloomberg API (BLPAPI) Mktdata API
   version: '2.54'
   summary: Logical OpenAPI representation of the Bloomberg API (BLPAPI) v3.x
   description: 'The Bloomberg API (BLPAPI) is the official client-side library for accessing
 
     Bloomberg market data, reference data, news, and analytics services across
 
-    Desktop API, Server API, and B-PIPE delivery models.
-
-
-    > **Important — protocol shape**: The native BLPAPI is **NOT** an HTTP/REST
-
-    > API. It is a binary, session-oriented, message-passing API delivered over
-
-    > the Bloomberg Network using the BLPAPI client SDK (C, C++, Java, .NET, Python).
-
-    > It uses a request/response paradigm and a subscription paradigm rather than
-
-    > stateless HTTP verbs.
-
-    >
-
-    > This OpenAPI document is a **logical mapping** of the BLPAPI service and
-
-    > schema model into HTTP-shaped operations so that:
-
-    >
-
-    >   - The request and response message shapes for each Bloomberg service
-
-    >     can be discovered, indexed, and reasoned about by tooling that speaks OpenAPI.
-
-    >   - Agents and code-generators can derive typed client wrappers around the
-
-    >     official BLPAPI SDK.
-
-    >   - The Bloomberg services and their operations become discoverable in
-
-    >     APIs.json indexes alongside REST APIs.
-
-    >
-
-    > **It is not a runnable HTTP gateway**. Calls described here must be
-
-    > translated into BLPAPI SDK requests against a Bloomberg session.
-
-    >
-
-    > For Bloomberg''s REST/HTTP products (Bloomberg Data License REST API,
-
-    > Bloomberg HAPI, Enterprise Data Catalog) refer to those products'' own
-
-    > developer portals — they are separate from BLPAPI.
-
-
-    ## Services
-
-
-    The BLPAPI exposes services at well-known service names:
-
-
-    - `//blp/refdata` — Reference Data Service (request/response)
-
-    - `//blp/mktdata` — Market Data Service (subscription)
-
-    - `//blp/mktvwap` — Custom VWAP Service (subscription)
-
-    - `//blp/mktbar` — Market Bar Subscription Service (subscription)
-
-    - `//blp/apiflds` — API Field Information Service (request/response)
-
-    - `//blp/pagedata` — Page Data Service (subscription)
-
-    - `//blp/tasvc` — Technical Analysis Service (request/response)
-
-    - `//blp/apiauth` — API Authorization Service (request/response)
-
-    - `//blp/instruments` — Instruments Service (request/response)
-
-
-    B-PIPE-only services (`//blp/mktdepthdata`, `//blp/mktlist`, `//blp/srcref`)
-
-    are documented in the BLPAPI Developer''s Guide section 9 and not modeled here.
-
-
-    ## Identifier formats
-
-
-    Securities follow the format `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]`
-
-    with optional Yellow Key (Govt, Corp, Mtge, M-Mkt, Muni, Pfd, Equity, Comdty,
-
-    Index, Curncy, Client). The default Topic Prefix is `ticker`. Other prefixes
-
-    include `cusip`, `isin`, `sedol1`, `sedol2`, `bbgid`, `buid`, `wpk`, `sicovam`,
-
-    `common`, `bsid`, `svm`, `cins`, `cats`.
-
-
-    Examples: `IBM US Equity`, `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`,
-
-    `GBPUSD BAAM Curncy`.
-
-
-    ## Auth and Permissioning
-
-
-    BLPAPI uses Entitlement IDs (EIDs), the `//blp/apiauth` service, and Identity
-
-    Objects to gate access to data. Three deployment-specific authorization models
-
-    apply:
-
-
-    - **Server API** — IP-based authorization
-
-    - **B-PIPE** — Token-based authorization with separate authentication step
-
-    - **Desktop API** — User context derived from the Bloomberg Professional terminal
-
-
-    See section 6 of the Developer''s Guide for details.
-
-    '
+    Desktop API, Server API, and B-PIPE delivery models.'
   contact:
     name: Bloomberg Production Support
     url: https://www.bloomberg.com/professional/support/
@@ -177,9 +61,7 @@ paths:
 
         > attaches an EventQueue or callback that receives updates until the
 
-        > subscription is unsubscribed.
-
-        '
+        > subscription is unsubscribed.'
       requestBody:
         required: true
         content:
