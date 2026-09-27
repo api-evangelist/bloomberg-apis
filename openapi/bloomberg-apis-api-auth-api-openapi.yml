@@ -149,66 +149,6 @@ paths:
                 $ref: '#/components/schemas/AuthorizationTokenResponse'
 components:
   schemas:
-    SecurityEntitlementsResponse:
-      type: object
-      properties:
-        eidData:
-          type: array
-          items:
-            type: object
-            properties:
-              status:
-                type: integer
-              sequenceNumber:
-                type: integer
-              eids:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    entitlementId:
-                      type: integer
-    AuthorizationRequest:
-      type: object
-      properties:
-        uuid:
-          type: integer
-          description: Bloomberg unique user identifier.
-          example: 11223344
-        ipAddress:
-          type: string
-          description: Location where the user is viewing the Server API data.
-          example: 111.22.33.44
-        token:
-          type: string
-          description: 'B-PIPE token (deprecated for new applications). Either `ipAddress`
-
-            or `token` must be supplied.
-
-            '
-          deprecated: true
-        requireAsidEquivalence:
-          type: boolean
-          description: 'Deprecated. When true, AuthorizationRequest succeeds only if the
-
-            user''s permissioning matches or exceeds the Server API''s.
-
-            '
-          deprecated: true
-          default: false
-    AuthorizationResponse:
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/AuthorizationSuccess'
-      - $ref: '#/components/schemas/AuthorizationFailure'
-    AuthorizationFailure:
-      type: object
-      properties:
-        AuthorizationFailure:
-          type: object
-          properties:
-            reason:
-              $ref: '#/components/schemas/ErrorInfo'
     ErrorInfo:
       type: object
       description: Standard error envelope used in BLPAPI responses.
@@ -238,12 +178,23 @@ components:
         subcategory:
           type: string
           description: (Optional) more specific classification of the failure.
-    AuthorizationSuccess:
+    AuthorizationTokenResponse:
       type: object
       properties:
-        AuthorizationSuccess:
-          type: object
-          description: Empty success indicator. Identity object returned on the wire.
+        token:
+          type: string
+          description: Token string returned on success.
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
+    SecurityEntitlementsRequest:
+      type: object
+      required:
+      - securities
+      properties:
+        securities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Security'
     UserEntitlementsResponse:
       type: object
       properties:
@@ -254,31 +205,6 @@ components:
             properties:
               entitlementId:
                 type: integer
-    LogonStatusResponse:
-      type: object
-      properties:
-        isLoggedOn:
-          type: boolean
-          description: True when the UUID is logged into Bloomberg Professional at the IP.
-    SecurityEntitlementsRequest:
-      type: object
-      required:
-      - securities
-      properties:
-        securities:
-          type: array
-          items:
-            $ref: '#/components/schemas/Security'
-    LogonStatusRequest:
-      type: object
-      required:
-      - uuid
-      - ipAddress
-      properties:
-        uuid:
-          type: integer
-        ipAddress:
-          type: string
     UserEntitlementsRequest:
       type: object
       required:
@@ -286,16 +212,25 @@ components:
       properties:
         uuid:
           type: integer
-    AuthorizationTokenRequest:
+    AuthorizationFailure:
       type: object
-      required:
-      - uuid
       properties:
-        uuid:
-          type: integer
-        label:
-          type: string
-          description: Identifier for the requesting Server API application.
+        AuthorizationFailure:
+          type: object
+          properties:
+            reason:
+              $ref: '#/components/schemas/ErrorInfo'
+    AuthorizationResponse:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/AuthorizationSuccess'
+      - $ref: '#/components/schemas/AuthorizationFailure'
+    LogonStatusResponse:
+      type: object
+      properties:
+        isLoggedOn:
+          type: boolean
+          description: True when the UUID is logged into Bloomberg Professional at the IP.
     Security:
       type: string
       description: 'Bloomberg security identifier in the form
@@ -313,14 +248,79 @@ components:
       - /cusip/912828GM6@BGN
       - MSFT@ETPX US Equity
       - GBPUSD BAAM Curncy
-    AuthorizationTokenResponse:
+    AuthorizationTokenRequest:
+      type: object
+      required:
+      - uuid
+      properties:
+        uuid:
+          type: integer
+        label:
+          type: string
+          description: Identifier for the requesting Server API application.
+    SecurityEntitlementsResponse:
       type: object
       properties:
+        eidData:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: integer
+              sequenceNumber:
+                type: integer
+              eids:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    entitlementId:
+                      type: integer
+    AuthorizationSuccess:
+      type: object
+      properties:
+        AuthorizationSuccess:
+          type: object
+          description: Empty success indicator. Identity object returned on the wire.
+    LogonStatusRequest:
+      type: object
+      required:
+      - uuid
+      - ipAddress
+      properties:
+        uuid:
+          type: integer
+        ipAddress:
+          type: string
+    AuthorizationRequest:
+      type: object
+      properties:
+        uuid:
+          type: integer
+          description: Bloomberg unique user identifier.
+          example: 11223344
+        ipAddress:
+          type: string
+          description: Location where the user is viewing the Server API data.
+          example: 111.22.33.44
         token:
           type: string
-          description: Token string returned on success.
-        responseError:
-          $ref: '#/components/schemas/ErrorInfo'
+          description: 'B-PIPE token (deprecated for new applications). Either `ipAddress`
+
+            or `token` must be supplied.
+
+            '
+          deprecated: true
+        requireAsidEquivalence:
+          type: boolean
+          description: 'Deprecated. When true, AuthorizationRequest succeeds only if the
+
+            user''s permissioning matches or exceeds the Server API''s.
+
+            '
+          deprecated: true
+          default: false
   securitySchemes:
     desktopAPI:
       type: apiKey

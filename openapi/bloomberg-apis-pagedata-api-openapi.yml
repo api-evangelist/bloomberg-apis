@@ -66,17 +66,6 @@ paths:
                 $ref: '#/components/schemas/PageDataEvents'
 components:
   schemas:
-    PageUpdate:
-      type: object
-      properties:
-        numRows:
-          type: integer
-        numCols:
-          type: integer
-        rowUpdate:
-          type: array
-          items:
-            $ref: '#/components/schemas/RowUpdate'
     PageDataSubscription:
       type: object
       required:
@@ -160,6 +149,17 @@ components:
                 - VIOLET
                 - WHITE
                 - YELLOW
+    PageUpdate:
+      type: object
+      properties:
+        numRows:
+          type: integer
+        numCols:
+          type: integer
+        rowUpdate:
+          type: array
+          items:
+            $ref: '#/components/schemas/RowUpdate'
   securitySchemes:
     desktopAPI:
       type: apiKey

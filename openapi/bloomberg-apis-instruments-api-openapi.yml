@@ -102,30 +102,6 @@ paths:
                 $ref: '#/components/schemas/InstrumentLookupResponse'
 components:
   schemas:
-    InstrumentLookupResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-            description: Per-instrument result. Shape varies by lookup type.
-    GovtLookupRequest:
-      type: object
-      required:
-      - query
-      properties:
-        query:
-          type: string
-        maxResults:
-          type: integer
-          default: 10
-        partialMatch:
-          type: boolean
-          default: true
-        ticker:
-          type: string
     CurveLookupRequest:
       type: object
       required:
@@ -147,6 +123,21 @@ components:
         curveid:
           type: string
         bbgid:
+          type: string
+    GovtLookupRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+        maxResults:
+          type: integer
+          default: 10
+        partialMatch:
+          type: boolean
+          default: true
+        ticker:
           type: string
     SecurityLookupRequest:
       type: object
@@ -179,6 +170,15 @@ components:
           - YK_FILTER_INDX
           - YK_FILTER_CRNCY
           - YK_FILTER_CLNT
+    InstrumentLookupResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+            description: Per-instrument result. Shape varies by lookup type.
   securitySchemes:
     desktopAPI:
       type: apiKey

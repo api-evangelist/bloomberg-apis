@@ -87,7 +87,7 @@ apis:
   - type: Documentation
     url: https://www.bloomberg.com/professional/products/data/data-management/data-license/
 - aid: bloomberg-apis:bloomberg-apis-apiflds-api
-  name: Bloomberg APIs apiflds API
+  name: Bloomberg APIs Apiflds API
   description: API Field Information Service — discover and search Bloomberg fields
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
@@ -96,7 +96,7 @@ apis:
   - type: OpenAPI
     url: openapi/bloomberg-apis-apiflds-api-openapi.yml
 - aid: bloomberg-apis:bloomberg-apis-instruments-api
-  name: Bloomberg APIs instruments API
+  name: Bloomberg APIs Instruments API
   description: Instruments Service — security/curve/government lookups
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
@@ -107,7 +107,7 @@ apis:
   - type: OpenAPI
     url: openapi/bloomberg-apis-instruments-api-openapi.yml
 - aid: bloomberg-apis:bloomberg-apis-mktbar-api
-  name: Bloomberg APIs mktbar API
+  name: Bloomberg APIs Mktbar API
   description: Market Bar Subscription Service — streaming subscription
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
@@ -116,7 +116,7 @@ apis:
   - type: OpenAPI
     url: openapi/bloomberg-apis-mktbar-api-openapi.yml
 - aid: bloomberg-apis:bloomberg-apis-mktdata-api
-  name: Bloomberg APIs mktdata API
+  name: Bloomberg APIs Mktdata API
   description: Market Data Service — streaming subscription paradigm
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
@@ -125,7 +125,7 @@ apis:
   - type: OpenAPI
     url: openapi/bloomberg-apis-mktdata-api-openapi.yml
 - aid: bloomberg-apis:bloomberg-apis-mktvwap-api
-  name: Bloomberg APIs mktvwap API
+  name: Bloomberg APIs Mktvwap API
   description: Custom VWAP Service — streaming subscription
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
@@ -134,7 +134,7 @@ apis:
   - type: OpenAPI
     url: openapi/bloomberg-apis-mktvwap-api-openapi.yml
 - aid: bloomberg-apis:bloomberg-apis-pagedata-api
-  name: Bloomberg APIs pagedata API
+  name: Bloomberg APIs Pagedata API
   description: Page Data Service — GPGX page subscription
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
@@ -143,7 +143,7 @@ apis:
   - type: OpenAPI
     url: openapi/bloomberg-apis-pagedata-api-openapi.yml
 - aid: bloomberg-apis:bloomberg-apis-tasvc-api
-  name: Bloomberg APIs tasvc API
+  name: Bloomberg APIs Tasvc API
   description: Technical Analysis Service — historical, intraday, and real-time studies
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
@@ -165,8 +165,6 @@ apis:
   description: Reference Data Service operations — request/response paradigm
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
-  - Ref-Data
-  tags_raw:
   - Ref Data
   properties:
   - type: OpenAPI

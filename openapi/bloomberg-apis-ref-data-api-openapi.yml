@@ -215,8 +215,57 @@ paths:
                 $ref: '#/components/schemas/BeqsResponse'
 components:
   schemas:
-    PortfolioDataResponse:
-      $ref: '#/components/schemas/ReferenceDataResponse'
+    IntradayBarRequest:
+      type: object
+      required:
+      - security
+      - eventType
+      - startDateTime
+      - endDateTime
+      - interval
+      properties:
+        security:
+          $ref: '#/components/schemas/Security'
+        eventType:
+          type: string
+          enum:
+          - TRADE
+          - BID
+          - ASK
+          - BID_BEST
+          - ASK_BEST
+          - BEST_BID
+          - BEST_ASK
+        startDateTime:
+          type: string
+          format: date-time
+        endDateTime:
+          type: string
+          format: date-time
+        interval:
+          type: integer
+          minimum: 1
+          maximum: 1440
+          description: Bar length in minutes (1 = one-minute bars, 1440 = daily).
+        gapFillInitialBar:
+          type: boolean
+          description: Fill an empty bar with previous values.
+          default: false
+        returnEids:
+          type: boolean
+          default: false
+        adjustmentNormal:
+          type: boolean
+          default: false
+        adjustmentAbnormal:
+          type: boolean
+          default: false
+        adjustmentSplit:
+          type: boolean
+          default: false
+        adjustmentFollowDPDF:
+          type: boolean
+          default: true
     Field:
       type: string
       description: 'Bloomberg field mnemonic (e.g. `PX_LAST`, `LAST_PRICE`, `BID`, `ASK`)
@@ -230,6 +279,300 @@ components:
       - BID
       - ASK
       - VOLUME
+    EidData:
+      type: object
+      description: Entitlement Identifier(s) attached to a security or user.
+      properties:
+        entitlementId:
+          type: integer
+        eids:
+          type: array
+          items:
+            type: integer
+        status:
+          type: integer
+          description: 0 = success; non-zero indicates failure.
+        sequenceNumber:
+          type: integer
+    HistoricalDataResponse:
+      type: object
+      properties:
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
+        securityData:
+          $ref: '#/components/schemas/SecurityData'
+    ReferenceDataRequest:
+      type: object
+      required:
+      - securities
+      - fields
+      properties:
+        securities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Security'
+          description: One or more Bloomberg securities.
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+          description: One or more Bloomberg field mnemonics or CALCRT ids.
+        overrides:
+          type: array
+          items:
+            $ref: '#/components/schemas/Override'
+          description: Up to 100 overrides applied to derived field calculations.
+          maxItems: 100
+        returnEids:
+          type: boolean
+          description: Populate fieldData with EID date entries.
+          default: false
+        returnFormattedValue:
+          type: boolean
+          description: Force all values to be returned as strings.
+          default: false
+        useUTCTime:
+          type: boolean
+          description: Return date/time values in UTC. Default follows TZDF<GO> setting.
+          default: false
+        forcedDelay:
+          type: boolean
+          description: Return data delayed by the exchange's delay period (typically 15 min).
+          default: false
+    FieldException:
+      type: object
+      description: Indicates a field could not be returned for a security.
+      required:
+      - fieldId
+      - errorInfo
+      properties:
+        fieldId:
+          type: string
+        errorInfo:
+          $ref: '#/components/schemas/ErrorInfo'
+    ErrorInfo:
+      type: object
+      description: Standard error envelope used in BLPAPI responses.
+      required:
+      - source
+      - code
+      - category
+      - message
+      properties:
+        source:
+          type: string
+          description: Bloomberg internal error source (e.g. `bbdbl1.r1.kgw`).
+        code:
+          type: integer
+          description: Bloomberg internal error code.
+        category:
+          type: string
+          description: General classification of the failure.
+          examples:
+          - BAD_SEC
+          - BAD_FLD
+          - INVALID_REQUEST
+          - NO_AUTH
+        message:
+          type: string
+          description: Human-readable description of the failure.
+        subcategory:
+          type: string
+          description: (Optional) more specific classification of the failure.
+    PortfolioDataRequest:
+      type: object
+      required:
+      - securities
+      - fields
+      properties:
+        securities:
+          type: array
+          items:
+            type: string
+            description: Portfolio ID from `PRTU<GO>` (e.g. `UXXXXXXX-X Client`).
+        fields:
+          type: array
+          items:
+            type: string
+            enum:
+            - PORTFOLIO_MEMBER
+            - PORTFOLIO_MPOSITION
+            - PORTFOLIO_MWEIGHT
+            - PORTFOLIO_DATA
+        overrides:
+          type: array
+          items:
+            $ref: '#/components/schemas/Override'
+          description: Use REFERENCE_DATE override for historical lookup.
+    FieldData:
+      type: object
+      description: A single returned (field, value) datum.
+      properties:
+        '*':
+          oneOf:
+          - type: string
+          - type: number
+          - type: integer
+          - type: boolean
+          description: 'The field name is a property name (e.g. `PX_LAST`, `LAST_PRICE`),
+
+            and the value is the typed data point. When `returnFormattedValue`
+
+            is true on the request, all values are returned as strings.
+
+            '
+    IntradayTickRequest:
+      type: object
+      required:
+      - security
+      - eventTypes
+      - startDateTime
+      - endDateTime
+      properties:
+        security:
+          $ref: '#/components/schemas/Security'
+          description: Single security only.
+        eventTypes:
+          type: array
+          items:
+            type: string
+            enum:
+            - TRADE
+            - BID
+            - ASK
+            - BID_BEST
+            - ASK_BEST
+            - MID_PRICE
+            - AT_TRADE
+            - BEST_BID
+            - BEST_ASK
+        startDateTime:
+          type: string
+          format: date-time
+          description: Start time in UTC, format `YYYY-MM-DDTHH:MM:SS`.
+        endDateTime:
+          type: string
+          format: date-time
+        includeConditionCodes:
+          type: boolean
+          default: false
+        includeNonPlottableEvents:
+          type: boolean
+          default: false
+        includeExchangeCodes:
+          type: boolean
+          default: false
+        returnEids:
+          type: boolean
+          default: false
+        includeBrokerCodes:
+          type: boolean
+          description: Canadian, Finnish, Mexican, Philippine, Swedish equities only.
+          default: false
+        includeRpsCodes:
+          type: boolean
+          description: Reporting Party Side codes.
+          default: false
+        includeBicMicCodes:
+          type: boolean
+          description: Bank Identifier Code / Market Identifier Code.
+          default: false
+    IntradayBarResponse:
+      type: object
+      properties:
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
+        barData:
+          type: object
+          properties:
+            barTickData:
+              type: array
+              items:
+                type: object
+                properties:
+                  time:
+                    type: string
+                    format: date-time
+                  open:
+                    type: number
+                  high:
+                    type: number
+                  low:
+                    type: number
+                  close:
+                    type: number
+                  volume:
+                    type: integer
+                    format: int64
+                  numEvents:
+                    type: integer
+                  value:
+                    type: number
+        eidData:
+          type: array
+          items:
+            $ref: '#/components/schemas/EidData'
+    BeqsRequest:
+      type: object
+      required:
+      - screenName
+      properties:
+        screenName:
+          type: string
+          description: Name of the EQS screen to execute.
+          example: Global Volume Surges
+        screenType:
+          type: string
+          enum:
+          - PRIVATE
+          - GLOBAL
+          description: PRIVATE = user-defined; GLOBAL = Bloomberg EQS.
+        languageId:
+          type: string
+          enum:
+          - ENGLISH
+          - KANJI
+          - FRENCH
+          - GERMAN
+          - SPANISH
+          - PORTUGUESE
+          - ITALIAN
+          - CHINESE_TRA
+          - KOREAN
+          - CHINESE_SIM
+          - THAI
+          - SWED
+          - FINNISH
+          - DUTCH
+          - MALAY
+          - RUSSIAN
+          - GREEK
+          - POLISH
+          - DANISH
+          - FLEMISH
+          - ESTONIAN
+          - TURKISH
+          - NORWEGIAN
+          - LATVIAN
+          - LITHUANIAN
+          - INDONESIAN
+        Group:
+          type: string
+          description: Screen folder name as defined in `EQS<GO>`.
+        overrides:
+          type: array
+          items:
+            $ref: '#/components/schemas/Override'
+          description: Use PiTDate override for historical access.
+    ReferenceDataResponse:
+      type: object
+      properties:
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
+        securityData:
+          type: array
+          items:
+            $ref: '#/components/schemas/SecurityData'
     HistoricalDataRequest:
       type: object
       required:
@@ -346,267 +689,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Override'
-    IntradayBarRequest:
+    Override:
       type: object
+      description: A name/value override applied to a derived field calculation.
       required:
-      - security
-      - eventType
-      - startDateTime
-      - endDateTime
-      - interval
+      - fieldId
+      - value
       properties:
-        security:
-          $ref: '#/components/schemas/Security'
-        eventType:
+        fieldId:
           type: string
-          enum:
-          - TRADE
-          - BID
-          - ASK
-          - BID_BEST
-          - ASK_BEST
-          - BEST_BID
-          - BEST_ASK
-        startDateTime:
+          description: Field mnemonic / alpha-numeric (e.g. `PRICING_SOURCE`, `PR092`).
+        value:
           type: string
-          format: date-time
-        endDateTime:
-          type: string
-          format: date-time
-        interval:
-          type: integer
-          minimum: 1
-          maximum: 1440
-          description: Bar length in minutes (1 = one-minute bars, 1440 = daily).
-        gapFillInitialBar:
-          type: boolean
-          description: Fill an empty bar with previous values.
-          default: false
-        returnEids:
-          type: boolean
-          default: false
-        adjustmentNormal:
-          type: boolean
-          default: false
-        adjustmentAbnormal:
-          type: boolean
-          default: false
-        adjustmentSplit:
-          type: boolean
-          default: false
-        adjustmentFollowDPDF:
-          type: boolean
-          default: true
-    HistoricalDataResponse:
-      type: object
-      properties:
-        responseError:
-          $ref: '#/components/schemas/ErrorInfo'
-        securityData:
-          $ref: '#/components/schemas/SecurityData'
-    BeqsRequest:
-      type: object
-      required:
-      - screenName
-      properties:
-        screenName:
-          type: string
-          description: Name of the EQS screen to execute.
-          example: Global Volume Surges
-        screenType:
-          type: string
-          enum:
-          - PRIVATE
-          - GLOBAL
-          description: PRIVATE = user-defined; GLOBAL = Bloomberg EQS.
-        languageId:
-          type: string
-          enum:
-          - ENGLISH
-          - KANJI
-          - FRENCH
-          - GERMAN
-          - SPANISH
-          - PORTUGUESE
-          - ITALIAN
-          - CHINESE_TRA
-          - KOREAN
-          - CHINESE_SIM
-          - THAI
-          - SWED
-          - FINNISH
-          - DUTCH
-          - MALAY
-          - RUSSIAN
-          - GREEK
-          - POLISH
-          - DANISH
-          - FLEMISH
-          - ESTONIAN
-          - TURKISH
-          - NORWEGIAN
-          - LATVIAN
-          - LITHUANIAN
-          - INDONESIAN
-        Group:
-          type: string
-          description: Screen folder name as defined in `EQS<GO>`.
-        overrides:
-          type: array
-          items:
-            $ref: '#/components/schemas/Override'
-          description: Use PiTDate override for historical access.
-    IntradayBarResponse:
-      type: object
-      properties:
-        responseError:
-          $ref: '#/components/schemas/ErrorInfo'
-        barData:
-          type: object
-          properties:
-            barTickData:
-              type: array
-              items:
-                type: object
-                properties:
-                  time:
-                    type: string
-                    format: date-time
-                  open:
-                    type: number
-                  high:
-                    type: number
-                  low:
-                    type: number
-                  close:
-                    type: number
-                  volume:
-                    type: integer
-                    format: int64
-                  numEvents:
-                    type: integer
-                  value:
-                    type: number
-        eidData:
-          type: array
-          items:
-            $ref: '#/components/schemas/EidData'
-    ReferenceDataRequest:
-      type: object
-      required:
-      - securities
-      - fields
-      properties:
-        securities:
-          type: array
-          items:
-            $ref: '#/components/schemas/Security'
-          description: One or more Bloomberg securities.
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/Field'
-          description: One or more Bloomberg field mnemonics or CALCRT ids.
-        overrides:
-          type: array
-          items:
-            $ref: '#/components/schemas/Override'
-          description: Up to 100 overrides applied to derived field calculations.
-          maxItems: 100
-        returnEids:
-          type: boolean
-          description: Populate fieldData with EID date entries.
-          default: false
-        returnFormattedValue:
-          type: boolean
-          description: Force all values to be returned as strings.
-          default: false
-        useUTCTime:
-          type: boolean
-          description: Return date/time values in UTC. Default follows TZDF<GO> setting.
-          default: false
-        forcedDelay:
-          type: boolean
-          description: Return data delayed by the exchange's delay period (typically 15 min).
-          default: false
-    BeqsResponse:
-      $ref: '#/components/schemas/ReferenceDataResponse'
-    EidData:
-      type: object
-      description: Entitlement Identifier(s) attached to a security or user.
-      properties:
-        entitlementId:
-          type: integer
-        eids:
-          type: array
-          items:
-            type: integer
-        status:
-          type: integer
-          description: 0 = success; non-zero indicates failure.
-        sequenceNumber:
-          type: integer
-    SecurityData:
-      type: object
-      description: Per-security data block in a Reference / Historical / BEQS response.
-      required:
-      - security
-      properties:
-        security:
-          $ref: '#/components/schemas/Security'
-        sequenceNumber:
-          type: integer
-          description: Position of the security in the original request.
-        fieldData:
-          oneOf:
-          - $ref: '#/components/schemas/FieldData'
-          - type: array
-            items:
-              $ref: '#/components/schemas/FieldData'
-          description: 'Reference responses return a single fieldData object per security.
+          description: 'Override value as a string. Dates use `YYYYMMDD`. Decimals always
 
-            Historical responses return an array of fieldData rows (one per
-
-            interval) — each row may include `relativeDate` and `date` keys
-
-            in addition to field values.
+            use `.` as the decimal separator regardless of locale.
 
             '
-        fieldExceptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldException'
-        securityError:
-          $ref: '#/components/schemas/ErrorInfo'
-    ErrorInfo:
-      type: object
-      description: Standard error envelope used in BLPAPI responses.
-      required:
-      - source
-      - code
-      - category
-      - message
-      properties:
-        source:
-          type: string
-          description: Bloomberg internal error source (e.g. `bbdbl1.r1.kgw`).
-        code:
-          type: integer
-          description: Bloomberg internal error code.
-        category:
-          type: string
-          description: General classification of the failure.
-          examples:
-          - BAD_SEC
-          - BAD_FLD
-          - INVALID_REQUEST
-          - NO_AUTH
-        message:
-          type: string
-          description: Human-readable description of the failure.
-        subcategory:
-          type: string
-          description: (Optional) more specific classification of the failure.
+      examples:
+      - fieldId: PRICING_SOURCE
+        value: BGN
+      - fieldId: BEST_DATA_SOURCE_OVERRIDE
+        value: BLI
     IntradayTickResponse:
       type: object
       properties:
@@ -659,6 +763,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EidData'
+    BeqsResponse:
+      $ref: '#/components/schemas/ReferenceDataResponse'
+    PortfolioDataResponse:
+      $ref: '#/components/schemas/ReferenceDataResponse'
     Security:
       type: string
       description: 'Bloomberg security identifier in the form
@@ -676,146 +784,38 @@ components:
       - /cusip/912828GM6@BGN
       - MSFT@ETPX US Equity
       - GBPUSD BAAM Curncy
-    Override:
+    SecurityData:
       type: object
-      description: A name/value override applied to a derived field calculation.
-      required:
-      - fieldId
-      - value
-      properties:
-        fieldId:
-          type: string
-          description: Field mnemonic / alpha-numeric (e.g. `PRICING_SOURCE`, `PR092`).
-        value:
-          type: string
-          description: 'Override value as a string. Dates use `YYYYMMDD`. Decimals always
-
-            use `.` as the decimal separator regardless of locale.
-
-            '
-      examples:
-      - fieldId: PRICING_SOURCE
-        value: BGN
-      - fieldId: BEST_DATA_SOURCE_OVERRIDE
-        value: BLI
-    FieldData:
-      type: object
-      description: A single returned (field, value) datum.
-      properties:
-        '*':
-          oneOf:
-          - type: string
-          - type: number
-          - type: integer
-          - type: boolean
-          description: 'The field name is a property name (e.g. `PX_LAST`, `LAST_PRICE`),
-
-            and the value is the typed data point. When `returnFormattedValue`
-
-            is true on the request, all values are returned as strings.
-
-            '
-    PortfolioDataRequest:
-      type: object
-      required:
-      - securities
-      - fields
-      properties:
-        securities:
-          type: array
-          items:
-            type: string
-            description: Portfolio ID from `PRTU<GO>` (e.g. `UXXXXXXX-X Client`).
-        fields:
-          type: array
-          items:
-            type: string
-            enum:
-            - PORTFOLIO_MEMBER
-            - PORTFOLIO_MPOSITION
-            - PORTFOLIO_MWEIGHT
-            - PORTFOLIO_DATA
-        overrides:
-          type: array
-          items:
-            $ref: '#/components/schemas/Override'
-          description: Use REFERENCE_DATE override for historical lookup.
-    ReferenceDataResponse:
-      type: object
-      properties:
-        responseError:
-          $ref: '#/components/schemas/ErrorInfo'
-        securityData:
-          type: array
-          items:
-            $ref: '#/components/schemas/SecurityData'
-    FieldException:
-      type: object
-      description: Indicates a field could not be returned for a security.
-      required:
-      - fieldId
-      - errorInfo
-      properties:
-        fieldId:
-          type: string
-        errorInfo:
-          $ref: '#/components/schemas/ErrorInfo'
-    IntradayTickRequest:
-      type: object
+      description: Per-security data block in a Reference / Historical / BEQS response.
       required:
       - security
-      - eventTypes
-      - startDateTime
-      - endDateTime
       properties:
         security:
           $ref: '#/components/schemas/Security'
-          description: Single security only.
-        eventTypes:
+        sequenceNumber:
+          type: integer
+          description: Position of the security in the original request.
+        fieldData:
+          oneOf:
+          - $ref: '#/components/schemas/FieldData'
+          - type: array
+            items:
+              $ref: '#/components/schemas/FieldData'
+          description: 'Reference responses return a single fieldData object per security.
+
+            Historical responses return an array of fieldData rows (one per
+
+            interval) — each row may include `relativeDate` and `date` keys
+
+            in addition to field values.
+
+            '
+        fieldExceptions:
           type: array
           items:
-            type: string
-            enum:
-            - TRADE
-            - BID
-            - ASK
-            - BID_BEST
-            - ASK_BEST
-            - MID_PRICE
-            - AT_TRADE
-            - BEST_BID
-            - BEST_ASK
-        startDateTime:
-          type: string
-          format: date-time
-          description: Start time in UTC, format `YYYY-MM-DDTHH:MM:SS`.
-        endDateTime:
-          type: string
-          format: date-time
-        includeConditionCodes:
-          type: boolean
-          default: false
-        includeNonPlottableEvents:
-          type: boolean
-          default: false
-        includeExchangeCodes:
-          type: boolean
-          default: false
-        returnEids:
-          type: boolean
-          default: false
-        includeBrokerCodes:
-          type: boolean
-          description: Canadian, Finnish, Mexican, Philippine, Swedish equities only.
-          default: false
-        includeRpsCodes:
-          type: boolean
-          description: Reporting Party Side codes.
-          default: false
-        includeBicMicCodes:
-          type: boolean
-          description: Bank Identifier Code / Market Identifier Code.
-          default: false
+            $ref: '#/components/schemas/FieldException'
+        securityError:
+          $ref: '#/components/schemas/ErrorInfo'
   securitySchemes:
     desktopAPI:
       type: apiKey

@@ -66,14 +66,30 @@ paths:
                 $ref: '#/components/schemas/StudyResponse'
 components:
   schemas:
-    RealtimePriceSource:
+    IntradayPriceSource:
       type: object
       properties:
         sourceType:
           type: string
-          const: RealtimePriceSource
+          const: IntradayPriceSource
         security:
           $ref: '#/components/schemas/Security'
+        eventType:
+          type: string
+          enum:
+          - TRADE
+          - BID
+          - ASK
+        startDateTime:
+          type: string
+          format: date-time
+        endDateTime:
+          type: string
+          format: date-time
+        interval:
+          type: integer
+          minimum: 1
+          maximum: 1440
     ErrorInfo:
       type: object
       description: Standard error envelope used in BLPAPI responses.
@@ -103,21 +119,28 @@ components:
         subcategory:
           type: string
           description: (Optional) more specific classification of the failure.
-    StudyResponse:
+    StudyRequest:
       type: object
+      required:
+      - priceSource
+      - studyAttributes
       properties:
-        responseError:
-          $ref: '#/components/schemas/ErrorInfo'
-        studyData:
-          type: array
-          items:
-            type: object
-            properties:
-              date:
-                type: string
-                format: date-time
-              value:
-                type: number
+        priceSource:
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/HistoricalPriceSource'
+          - $ref: '#/components/schemas/IntradayPriceSource'
+          - $ref: '#/components/schemas/RealtimePriceSource'
+        studyAttributes:
+          type: object
+          description: 'Study-specific parameters (e.g. for SMA: period; for MACD: fastEMA,
+
+            slowEMA, signalEMA; for Bollinger: period, stdDev). Refer to the
+
+            BLPAPI Developer''s Guide for the full set per study.
+
+            '
+          additionalProperties: true
     Security:
       type: string
       description: 'Bloomberg security identifier in the form
@@ -135,6 +158,29 @@ components:
       - /cusip/912828GM6@BGN
       - MSFT@ETPX US Equity
       - GBPUSD BAAM Curncy
+    RealtimePriceSource:
+      type: object
+      properties:
+        sourceType:
+          type: string
+          const: RealtimePriceSource
+        security:
+          $ref: '#/components/schemas/Security'
+    StudyResponse:
+      type: object
+      properties:
+        responseError:
+          $ref: '#/components/schemas/ErrorInfo'
+        studyData:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date-time
+              value:
+                type: number
     HistoricalPriceSource:
       type: object
       properties:
@@ -165,52 +211,6 @@ components:
           - QUARTERLY
           - SEMI_ANNUALLY
           - YEARLY
-    IntradayPriceSource:
-      type: object
-      properties:
-        sourceType:
-          type: string
-          const: IntradayPriceSource
-        security:
-          $ref: '#/components/schemas/Security'
-        eventType:
-          type: string
-          enum:
-          - TRADE
-          - BID
-          - ASK
-        startDateTime:
-          type: string
-          format: date-time
-        endDateTime:
-          type: string
-          format: date-time
-        interval:
-          type: integer
-          minimum: 1
-          maximum: 1440
-    StudyRequest:
-      type: object
-      required:
-      - priceSource
-      - studyAttributes
-      properties:
-        priceSource:
-          type: object
-          oneOf:
-          - $ref: '#/components/schemas/HistoricalPriceSource'
-          - $ref: '#/components/schemas/IntradayPriceSource'
-          - $ref: '#/components/schemas/RealtimePriceSource'
-        studyAttributes:
-          type: object
-          description: 'Study-specific parameters (e.g. for SMA: period; for MACD: fastEMA,
-
-            slowEMA, signalEMA; for Bollinger: period, stdDev). Refer to the
-
-            BLPAPI Developer''s Guide for the full set per study.
-
-            '
-          additionalProperties: true
   securitySchemes:
     desktopAPI:
       type: apiKey

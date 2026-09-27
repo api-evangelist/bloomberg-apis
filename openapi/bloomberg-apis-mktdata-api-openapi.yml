@@ -101,6 +101,19 @@ components:
               data:
                 type: object
                 description: Per-field updates (only changed fields after the initial SUMMARY).
+    Field:
+      type: string
+      description: 'Bloomberg field mnemonic (e.g. `PX_LAST`, `LAST_PRICE`, `BID`, `ASK`)
+
+        or alpha-numeric CALCRT id (e.g. `pq005`).
+
+        '
+      examples:
+      - PX_LAST
+      - LAST_PRICE
+      - BID
+      - ASK
+      - VOLUME
     MarketDataSubscriptionList:
       type: object
       required:
@@ -138,19 +151,6 @@ components:
               correlationId:
                 type: string
                 description: Application-supplied correlation id for routing.
-    Field:
-      type: string
-      description: 'Bloomberg field mnemonic (e.g. `PX_LAST`, `LAST_PRICE`, `BID`, `ASK`)
-
-        or alpha-numeric CALCRT id (e.g. `pq005`).
-
-        '
-      examples:
-      - PX_LAST
-      - LAST_PRICE
-      - BID
-      - ASK
-      - VOLUME
   securitySchemes:
     desktopAPI:
       type: apiKey
