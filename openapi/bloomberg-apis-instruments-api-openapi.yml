@@ -102,43 +102,6 @@ paths:
                 $ref: '#/components/schemas/InstrumentLookupResponse'
 components:
   schemas:
-    CurveLookupRequest:
-      type: object
-      required:
-      - query
-      properties:
-        query:
-          type: string
-        maxResults:
-          type: integer
-          default: 10
-        countryCode:
-          type: string
-        currencyCode:
-          type: string
-        type:
-          type: string
-        subtype:
-          type: string
-        curveid:
-          type: string
-        bbgid:
-          type: string
-    GovtLookupRequest:
-      type: object
-      required:
-      - query
-      properties:
-        query:
-          type: string
-        maxResults:
-          type: integer
-          default: 10
-        partialMatch:
-          type: boolean
-          default: true
-        ticker:
-          type: string
     SecurityLookupRequest:
       type: object
       required:
@@ -170,6 +133,43 @@ components:
           - YK_FILTER_INDX
           - YK_FILTER_CRNCY
           - YK_FILTER_CLNT
+    GovtLookupRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+        maxResults:
+          type: integer
+          default: 10
+        partialMatch:
+          type: boolean
+          default: true
+        ticker:
+          type: string
+    CurveLookupRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+        maxResults:
+          type: integer
+          default: 10
+        countryCode:
+          type: string
+        currencyCode:
+          type: string
+        type:
+          type: string
+        subtype:
+          type: string
+        curveid:
+          type: string
+        bbgid:
+          type: string
     InstrumentLookupResponse:
       type: object
       properties:

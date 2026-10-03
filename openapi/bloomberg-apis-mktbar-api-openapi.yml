@@ -71,27 +71,6 @@ paths:
                 $ref: '#/components/schemas/MarketBarEvents'
 components:
   schemas:
-    MarketBarSubscription:
-      type: object
-      required:
-      - topic
-      properties:
-        topic:
-          type: string
-          description: 'Topic in the form
-
-            `//blp/mktbar/SYMBOLOGY/SECURITY?START_TIME=st&END_TIME=et&BAR_SIZE=bz`
-
-            For example: `//blp/mktbar/ticker/VOD LN Equity?start_time=9:30&bar_size=10`
-
-            '
-        fields:
-          type: array
-          items:
-            type: string
-            default: LAST_PRICE
-        correlationId:
-          type: string
     MarketBarEvents:
       type: object
       properties:
@@ -123,6 +102,27 @@ components:
           format: int64
         numberOfTicks:
           type: integer
+    MarketBarSubscription:
+      type: object
+      required:
+      - topic
+      properties:
+        topic:
+          type: string
+          description: 'Topic in the form
+
+            `//blp/mktbar/SYMBOLOGY/SECURITY?START_TIME=st&END_TIME=et&BAR_SIZE=bz`
+
+            For example: `//blp/mktbar/ticker/VOD LN Equity?start_time=9:30&bar_size=10`
+
+            '
+        fields:
+          type: array
+          items:
+            type: string
+            default: LAST_PRICE
+        correlationId:
+          type: string
   securitySchemes:
     desktopAPI:
       type: apiKey

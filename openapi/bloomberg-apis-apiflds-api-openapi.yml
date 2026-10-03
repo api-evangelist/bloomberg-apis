@@ -122,42 +122,35 @@ paths:
                 $ref: '#/components/schemas/CategorizedFieldResponse'
 components:
   schemas:
-    FieldResponse:
+    ErrorInfo:
       type: object
+      description: Standard error envelope used in BLPAPI responses.
+      required:
+      - source
+      - code
+      - category
+      - message
       properties:
-        fieldData:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                description: Bloomberg internal field id
-              fieldInfo:
-                type: object
-                properties:
-                  mnemonic:
-                    type: string
-                  description:
-                    type: string
-                  datatype:
-                    type: string
-                  documentation:
-                    type: string
-                  categoryName:
-                    type: array
-                    items:
-                      type: string
-                  property:
-                    type: array
-                    items:
-                      type: string
-                  overrides:
-                    type: array
-                    items:
-                      type: string
-              fieldError:
-                $ref: '#/components/schemas/ErrorInfo'
+        source:
+          type: string
+          description: Bloomberg internal error source (e.g. `bbdbl1.r1.kgw`).
+        code:
+          type: integer
+          description: Bloomberg internal error code.
+        category:
+          type: string
+          description: General classification of the failure.
+          examples:
+          - BAD_SEC
+          - BAD_FLD
+          - INVALID_REQUEST
+          - NO_AUTH
+        message:
+          type: string
+          description: Human-readable description of the failure.
+        subcategory:
+          type: string
+          description: (Optional) more specific classification of the failure.
     FieldSearchRequest:
       type: object
       required:
@@ -203,38 +196,42 @@ components:
               - Static
               - RealTime
               - All
-    CategorizedFieldSearchRequest:
-      allOf:
-      - $ref: '#/components/schemas/FieldSearchRequest'
-    ErrorInfo:
+    FieldResponse:
       type: object
-      description: Standard error envelope used in BLPAPI responses.
-      required:
-      - source
-      - code
-      - category
-      - message
       properties:
-        source:
-          type: string
-          description: Bloomberg internal error source (e.g. `bbdbl1.r1.kgw`).
-        code:
-          type: integer
-          description: Bloomberg internal error code.
-        category:
-          type: string
-          description: General classification of the failure.
-          examples:
-          - BAD_SEC
-          - BAD_FLD
-          - INVALID_REQUEST
-          - NO_AUTH
-        message:
-          type: string
-          description: Human-readable description of the failure.
-        subcategory:
-          type: string
-          description: (Optional) more specific classification of the failure.
+        fieldData:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Bloomberg internal field id
+              fieldInfo:
+                type: object
+                properties:
+                  mnemonic:
+                    type: string
+                  description:
+                    type: string
+                  datatype:
+                    type: string
+                  documentation:
+                    type: string
+                  categoryName:
+                    type: array
+                    items:
+                      type: string
+                  property:
+                    type: array
+                    items:
+                      type: string
+                  overrides:
+                    type: array
+                    items:
+                      type: string
+              fieldError:
+                $ref: '#/components/schemas/ErrorInfo'
     CategorizedFieldResponse:
       type: object
       properties:
@@ -249,6 +246,9 @@ components:
                 type: array
                 items:
                   $ref: '#/components/schemas/FieldResponse/properties/fieldData/items'
+    CategorizedFieldSearchRequest:
+      allOf:
+      - $ref: '#/components/schemas/FieldSearchRequest'
     FieldInfoRequest:
       type: object
       required:

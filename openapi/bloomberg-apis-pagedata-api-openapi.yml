@@ -66,24 +66,6 @@ paths:
                 $ref: '#/components/schemas/PageDataEvents'
 components:
   schemas:
-    PageDataSubscription:
-      type: object
-      required:
-      - topic
-      properties:
-        topic:
-          type: string
-          description: Form `GPGX/MONITOR/PAGE` (e.g. `0708/012/0001`).
-          example: 0708/012/0001
-        fields:
-          type: array
-          items:
-            type: string
-            description: Row specifiers — `1`, `1,2,3`, or `1,6-10,15,16`.
-    PageDataEvents:
-      oneOf:
-      - $ref: '#/components/schemas/PageUpdate'
-      - $ref: '#/components/schemas/RowUpdate'
     RowUpdate:
       type: object
       properties:
@@ -160,6 +142,24 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RowUpdate'
+    PageDataEvents:
+      oneOf:
+      - $ref: '#/components/schemas/PageUpdate'
+      - $ref: '#/components/schemas/RowUpdate'
+    PageDataSubscription:
+      type: object
+      required:
+      - topic
+      properties:
+        topic:
+          type: string
+          description: Form `GPGX/MONITOR/PAGE` (e.g. `0708/012/0001`).
+          example: 0708/012/0001
+        fields:
+          type: array
+          items:
+            type: string
+            description: Row specifiers — `1`, `1,2,3`, or `1,6-10,15,16`.
   securitySchemes:
     desktopAPI:
       type: apiKey
