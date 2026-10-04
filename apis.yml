@@ -165,8 +165,6 @@ apis:
   description: Reference Data Service operations — request/response paradigm
   humanURL: https://www.bloomberg.com/professional/support/api-library/
   tags:
-  - Ref-Data
-  tags_raw:
   - Ref Data
   properties:
   - type: OpenAPI

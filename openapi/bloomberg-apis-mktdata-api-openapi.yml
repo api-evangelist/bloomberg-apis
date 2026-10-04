@@ -77,43 +77,6 @@ paths:
                 $ref: '#/components/schemas/MarketDataEvents'
 components:
   schemas:
-    MarketDataEvents:
-      type: object
-      description: Event stream messages — SUBSCRIPTION_DATA / SUBSCRIPTION_STATUS.
-      properties:
-        eventType:
-          type: string
-          enum:
-          - SUBSCRIPTION_DATA
-          - SUBSCRIPTION_STATUS
-          - SESSION_STATUS
-          - SERVICE_STATUS
-        messages:
-          type: array
-          items:
-            type: object
-            properties:
-              messageType:
-                type: string
-                description: e.g. `MarketDataEvents`, `SubscriptionStarted`, `SubscriptionFailure`.
-              correlationId:
-                type: string
-              data:
-                type: object
-                description: Per-field updates (only changed fields after the initial SUMMARY).
-    Field:
-      type: string
-      description: 'Bloomberg field mnemonic (e.g. `PX_LAST`, `LAST_PRICE`, `BID`, `ASK`)
-
-        or alpha-numeric CALCRT id (e.g. `pq005`).
-
-        '
-      examples:
-      - PX_LAST
-      - LAST_PRICE
-      - BID
-      - ASK
-      - VOLUME
     MarketDataSubscriptionList:
       type: object
       required:
@@ -151,6 +114,43 @@ components:
               correlationId:
                 type: string
                 description: Application-supplied correlation id for routing.
+    MarketDataEvents:
+      type: object
+      description: Event stream messages — SUBSCRIPTION_DATA / SUBSCRIPTION_STATUS.
+      properties:
+        eventType:
+          type: string
+          enum:
+          - SUBSCRIPTION_DATA
+          - SUBSCRIPTION_STATUS
+          - SESSION_STATUS
+          - SERVICE_STATUS
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              messageType:
+                type: string
+                description: e.g. `MarketDataEvents`, `SubscriptionStarted`, `SubscriptionFailure`.
+              correlationId:
+                type: string
+              data:
+                type: object
+                description: Per-field updates (only changed fields after the initial SUMMARY).
+    Field:
+      type: string
+      description: 'Bloomberg field mnemonic (e.g. `PX_LAST`, `LAST_PRICE`, `BID`, `ASK`)
+
+        or alpha-numeric CALCRT id (e.g. `pq005`).
+
+        '
+      examples:
+      - PX_LAST
+      - LAST_PRICE
+      - BID
+      - ASK
+      - VOLUME
   securitySchemes:
     desktopAPI:
       type: apiKey

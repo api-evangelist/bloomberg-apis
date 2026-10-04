@@ -157,32 +157,6 @@ components:
           description: Token string returned on success.
         responseError:
           $ref: '#/components/schemas/ErrorInfo'
-    UserEntitlementsRequest:
-      type: object
-      required:
-      - uuid
-      properties:
-        uuid:
-          type: integer
-    SecurityEntitlementsResponse:
-      type: object
-      properties:
-        eidData:
-          type: array
-          items:
-            type: object
-            properties:
-              status:
-                type: integer
-              sequenceNumber:
-                type: integer
-              eids:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    entitlementId:
-                      type: integer
     AuthorizationTokenRequest:
       type: object
       required:
@@ -193,14 +167,6 @@ components:
         label:
           type: string
           description: Identifier for the requesting Server API application.
-    AuthorizationFailure:
-      type: object
-      properties:
-        AuthorizationFailure:
-          type: object
-          properties:
-            reason:
-              $ref: '#/components/schemas/ErrorInfo'
     ErrorInfo:
       type: object
       description: Standard error envelope used in BLPAPI responses.
@@ -230,64 +196,6 @@ components:
         subcategory:
           type: string
           description: (Optional) more specific classification of the failure.
-    LogonStatusResponse:
-      type: object
-      properties:
-        isLoggedOn:
-          type: boolean
-          description: True when the UUID is logged into Bloomberg Professional at the IP.
-    LogonStatusRequest:
-      type: object
-      required:
-      - uuid
-      - ipAddress
-      properties:
-        uuid:
-          type: integer
-        ipAddress:
-          type: string
-    Security:
-      type: string
-      description: 'Bloomberg security identifier in the form
-
-        `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]` with optional Yellow Key.
-
-        Default Topic Prefix is `ticker`. Examples: `IBM US Equity`,
-
-        `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`.
-
-        '
-      examples:
-      - IBM US Equity
-      - VOD LN Equity
-      - /cusip/912828GM6@BGN
-      - MSFT@ETPX US Equity
-      - GBPUSD BAAM Curncy
-    SecurityEntitlementsRequest:
-      type: object
-      required:
-      - securities
-      properties:
-        securities:
-          type: array
-          items:
-            $ref: '#/components/schemas/Security'
-    UserEntitlementsResponse:
-      type: object
-      properties:
-        eids:
-          type: array
-          items:
-            type: object
-            properties:
-              entitlementId:
-                type: integer
-    AuthorizationSuccess:
-      type: object
-      properties:
-        AuthorizationSuccess:
-          type: object
-          description: Empty success indicator. Identity object returned on the wire.
     AuthorizationRequest:
       type: object
       properties:
@@ -316,11 +224,103 @@ components:
             '
           deprecated: true
           default: false
+    LogonStatusRequest:
+      type: object
+      required:
+      - uuid
+      - ipAddress
+      properties:
+        uuid:
+          type: integer
+        ipAddress:
+          type: string
     AuthorizationResponse:
       type: object
       oneOf:
       - $ref: '#/components/schemas/AuthorizationSuccess'
       - $ref: '#/components/schemas/AuthorizationFailure'
+    UserEntitlementsRequest:
+      type: object
+      required:
+      - uuid
+      properties:
+        uuid:
+          type: integer
+    AuthorizationSuccess:
+      type: object
+      properties:
+        AuthorizationSuccess:
+          type: object
+          description: Empty success indicator. Identity object returned on the wire.
+    Security:
+      type: string
+      description: 'Bloomberg security identifier in the form
+
+        `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]` with optional Yellow Key.
+
+        Default Topic Prefix is `ticker`. Examples: `IBM US Equity`,
+
+        `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`.
+
+        '
+      examples:
+      - IBM US Equity
+      - VOD LN Equity
+      - /cusip/912828GM6@BGN
+      - MSFT@ETPX US Equity
+      - GBPUSD BAAM Curncy
+    SecurityEntitlementsRequest:
+      type: object
+      required:
+      - securities
+      properties:
+        securities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Security'
+    SecurityEntitlementsResponse:
+      type: object
+      properties:
+        eidData:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: integer
+              sequenceNumber:
+                type: integer
+              eids:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    entitlementId:
+                      type: integer
+    UserEntitlementsResponse:
+      type: object
+      properties:
+        eids:
+          type: array
+          items:
+            type: object
+            properties:
+              entitlementId:
+                type: integer
+    LogonStatusResponse:
+      type: object
+      properties:
+        isLoggedOn:
+          type: boolean
+          description: True when the UUID is logged into Bloomberg Professional at the IP.
+    AuthorizationFailure:
+      type: object
+      properties:
+        AuthorizationFailure:
+          type: object
+          properties:
+            reason:
+              $ref: '#/components/schemas/ErrorInfo'
   securitySchemes:
     desktopAPI:
       type: apiKey

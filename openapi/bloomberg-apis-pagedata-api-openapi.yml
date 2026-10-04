@@ -131,21 +131,6 @@ components:
                 - VIOLET
                 - WHITE
                 - YELLOW
-    PageUpdate:
-      type: object
-      properties:
-        numRows:
-          type: integer
-        numCols:
-          type: integer
-        rowUpdate:
-          type: array
-          items:
-            $ref: '#/components/schemas/RowUpdate'
-    PageDataEvents:
-      oneOf:
-      - $ref: '#/components/schemas/PageUpdate'
-      - $ref: '#/components/schemas/RowUpdate'
     PageDataSubscription:
       type: object
       required:
@@ -160,6 +145,21 @@ components:
           items:
             type: string
             description: Row specifiers — `1`, `1,2,3`, or `1,6-10,15,16`.
+    PageDataEvents:
+      oneOf:
+      - $ref: '#/components/schemas/PageUpdate'
+      - $ref: '#/components/schemas/RowUpdate'
+    PageUpdate:
+      type: object
+      properties:
+        numRows:
+          type: integer
+        numCols:
+          type: integer
+        rowUpdate:
+          type: array
+          items:
+            $ref: '#/components/schemas/RowUpdate'
   securitySchemes:
     desktopAPI:
       type: apiKey

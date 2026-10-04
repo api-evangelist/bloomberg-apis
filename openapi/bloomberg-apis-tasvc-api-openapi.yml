@@ -66,36 +66,6 @@ paths:
                 $ref: '#/components/schemas/StudyResponse'
 components:
   schemas:
-    StudyRequest:
-      type: object
-      required:
-      - priceSource
-      - studyAttributes
-      properties:
-        priceSource:
-          type: object
-          oneOf:
-          - $ref: '#/components/schemas/HistoricalPriceSource'
-          - $ref: '#/components/schemas/IntradayPriceSource'
-          - $ref: '#/components/schemas/RealtimePriceSource'
-        studyAttributes:
-          type: object
-          description: 'Study-specific parameters (e.g. for SMA: period; for MACD: fastEMA,
-
-            slowEMA, signalEMA; for Bollinger: period, stdDev). Refer to the
-
-            BLPAPI Developer''s Guide for the full set per study.
-
-            '
-          additionalProperties: true
-    RealtimePriceSource:
-      type: object
-      properties:
-        sourceType:
-          type: string
-          const: RealtimePriceSource
-        security:
-          $ref: '#/components/schemas/Security'
     ErrorInfo:
       type: object
       description: Standard error envelope used in BLPAPI responses.
@@ -125,23 +95,36 @@ components:
         subcategory:
           type: string
           description: (Optional) more specific classification of the failure.
-    Security:
-      type: string
-      description: 'Bloomberg security identifier in the form
+    RealtimePriceSource:
+      type: object
+      properties:
+        sourceType:
+          type: string
+          const: RealtimePriceSource
+        security:
+          $ref: '#/components/schemas/Security'
+    StudyRequest:
+      type: object
+      required:
+      - priceSource
+      - studyAttributes
+      properties:
+        priceSource:
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/HistoricalPriceSource'
+          - $ref: '#/components/schemas/IntradayPriceSource'
+          - $ref: '#/components/schemas/RealtimePriceSource'
+        studyAttributes:
+          type: object
+          description: 'Study-specific parameters (e.g. for SMA: period; for MACD: fastEMA,
 
-        `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]` with optional Yellow Key.
+            slowEMA, signalEMA; for Bollinger: period, stdDev). Refer to the
 
-        Default Topic Prefix is `ticker`. Examples: `IBM US Equity`,
+            BLPAPI Developer''s Guide for the full set per study.
 
-        `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`.
-
-        '
-      examples:
-      - IBM US Equity
-      - VOD LN Equity
-      - /cusip/912828GM6@BGN
-      - MSFT@ETPX US Equity
-      - GBPUSD BAAM Curncy
+            '
+          additionalProperties: true
     HistoricalPriceSource:
       type: object
       properties:
@@ -172,6 +155,23 @@ components:
           - QUARTERLY
           - SEMI_ANNUALLY
           - YEARLY
+    Security:
+      type: string
+      description: 'Bloomberg security identifier in the form
+
+        `[Topic Prefix]/SYMBOLOGY[@Pricing Source][Exchange]` with optional Yellow Key.
+
+        Default Topic Prefix is `ticker`. Examples: `IBM US Equity`,
+
+        `/cusip/912828GM6@BGN`, `MSFT@ETPX US Equity`.
+
+        '
+      examples:
+      - IBM US Equity
+      - VOD LN Equity
+      - /cusip/912828GM6@BGN
+      - MSFT@ETPX US Equity
+      - GBPUSD BAAM Curncy
     IntradayPriceSource:
       type: object
       properties:

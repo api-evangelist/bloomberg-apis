@@ -122,6 +122,42 @@ paths:
                 $ref: '#/components/schemas/CategorizedFieldResponse'
 components:
   schemas:
+    FieldResponse:
+      type: object
+      properties:
+        fieldData:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: Bloomberg internal field id
+              fieldInfo:
+                type: object
+                properties:
+                  mnemonic:
+                    type: string
+                  description:
+                    type: string
+                  datatype:
+                    type: string
+                  documentation:
+                    type: string
+                  categoryName:
+                    type: array
+                    items:
+                      type: string
+                  property:
+                    type: array
+                    items:
+                      type: string
+                  overrides:
+                    type: array
+                    items:
+                      type: string
+              fieldError:
+                $ref: '#/components/schemas/ErrorInfo'
     ErrorInfo:
       type: object
       description: Standard error envelope used in BLPAPI responses.
@@ -151,6 +187,29 @@ components:
         subcategory:
           type: string
           description: (Optional) more specific classification of the failure.
+    FieldInfoRequest:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: array
+          items:
+            type: string
+          description: Field mnemonics or alpha-numeric ids.
+          example:
+          - LAST_PRICE
+          - pq005
+          - ds002
+        returnFieldDocumentation:
+          type: boolean
+          default: false
+        properties:
+          type: array
+          items:
+            type: string
+            enum:
+            - fieldoverridable
     FieldSearchRequest:
       type: object
       required:
@@ -196,42 +255,6 @@ components:
               - Static
               - RealTime
               - All
-    FieldResponse:
-      type: object
-      properties:
-        fieldData:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                description: Bloomberg internal field id
-              fieldInfo:
-                type: object
-                properties:
-                  mnemonic:
-                    type: string
-                  description:
-                    type: string
-                  datatype:
-                    type: string
-                  documentation:
-                    type: string
-                  categoryName:
-                    type: array
-                    items:
-                      type: string
-                  property:
-                    type: array
-                    items:
-                      type: string
-                  overrides:
-                    type: array
-                    items:
-                      type: string
-              fieldError:
-                $ref: '#/components/schemas/ErrorInfo'
     CategorizedFieldResponse:
       type: object
       properties:
@@ -249,29 +272,6 @@ components:
     CategorizedFieldSearchRequest:
       allOf:
       - $ref: '#/components/schemas/FieldSearchRequest'
-    FieldInfoRequest:
-      type: object
-      required:
-      - id
-      properties:
-        id:
-          type: array
-          items:
-            type: string
-          description: Field mnemonics or alpha-numeric ids.
-          example:
-          - LAST_PRICE
-          - pq005
-          - ds002
-        returnFieldDocumentation:
-          type: boolean
-          default: false
-        properties:
-          type: array
-          items:
-            type: string
-            enum:
-            - fieldoverridable
   securitySchemes:
     desktopAPI:
       type: apiKey
