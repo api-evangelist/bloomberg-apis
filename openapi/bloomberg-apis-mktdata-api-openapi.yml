@@ -77,43 +77,6 @@ paths:
                 $ref: '#/components/schemas/MarketDataEvents'
 components:
   schemas:
-    MarketDataSubscriptionList:
-      type: object
-      required:
-      - subscriptions
-      properties:
-        subscriptions:
-          type: array
-          items:
-            type: object
-            required:
-            - topic
-            - fields
-            properties:
-              topic:
-                type: string
-                description: 'Subscription topic — typically `SECURITY` form. Examples:
-
-                  `IBM US Equity`, `/cusip/912828GM6@BGN`.
-
-                  '
-              fields:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Field'
-                description: Bloomberg fields to subscribe to.
-              options:
-                type: array
-                items:
-                  type: string
-                description: 'Subscription options as URL-style key/value pairs (e.g.
-
-                  `interval=1.0`, `delayed=true`).
-
-                  '
-              correlationId:
-                type: string
-                description: Application-supplied correlation id for routing.
     MarketDataEvents:
       type: object
       description: Event stream messages — SUBSCRIPTION_DATA / SUBSCRIPTION_STATUS.
@@ -151,6 +114,43 @@ components:
       - BID
       - ASK
       - VOLUME
+    MarketDataSubscriptionList:
+      type: object
+      required:
+      - subscriptions
+      properties:
+        subscriptions:
+          type: array
+          items:
+            type: object
+            required:
+            - topic
+            - fields
+            properties:
+              topic:
+                type: string
+                description: 'Subscription topic — typically `SECURITY` form. Examples:
+
+                  `IBM US Equity`, `/cusip/912828GM6@BGN`.
+
+                  '
+              fields:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Field'
+                description: Bloomberg fields to subscribe to.
+              options:
+                type: array
+                items:
+                  type: string
+                description: 'Subscription options as URL-style key/value pairs (e.g.
+
+                  `interval=1.0`, `delayed=true`).
+
+                  '
+              correlationId:
+                type: string
+                description: Application-supplied correlation id for routing.
   securitySchemes:
     desktopAPI:
       type: apiKey
