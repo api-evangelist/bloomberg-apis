@@ -1,4 +1,4 @@
-# Bloomberg APIs (bloomberg-apis)
+# Bloomberg APIs
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,93 +66,137 @@
 
 Collection of Bloomberg's financial data and news APIs for accessing market data, news content, data licensing, and enterprise connectivity.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/bloomberg-apis/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/bloomberg-apis/refs/heads/main/apis.yml)
+**Areas:** Analytics · Financial Data · Market Data · News · Terminal
 
-## Scope
+## Bloomberg APIs on APIs.io
 
-- **Type:** Index
+Everything profiled for Bloomberg APIs is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/bloomberg-apis/](https://apis.io/providers/bloomberg-apis/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (12)
 
-- Analytics
-- Financial Data
-- Market Data
-- News
-- Terminal
+- [Bloomberg Market Data Feed](https://apis.io/apis/bloomberg-apis/bloomberg-market-data-feed/) — Real-time and historical market data for equities, fixed income, commodities, and currencies.
+- [Bloomberg News API](https://apis.io/apis/bloomberg-apis/bloomberg-news-api/) — Access to Bloomberg's global news content, including articles, videos, and multimedia.
+- [Bloomberg Data License API](https://apis.io/apis/bloomberg-apis/bloomberg-data-license-api/) — Bulk data delivery service for historical and reference data.
+- [Bloomberg APIs Apiflds API](https://apis.io/apis/bloomberg-apis/bloomberg-apis-apiflds-api/) — API Field Information Service — discover and search Bloomberg fields
+- [Bloomberg APIs Instruments API](https://apis.io/apis/bloomberg-apis/bloomberg-apis-instruments-api/) — Instruments Service — security/curve/government lookups
+- [Bloomberg APIs Mktbar API](https://apis.io/apis/bloomberg-apis/bloomberg-apis-mktbar-api/) — Market Bar Subscription Service — streaming subscription
+- [Bloomberg APIs Mktdata API](https://apis.io/apis/bloomberg-apis/bloomberg-apis-mktdata-api/) — Market Data Service — streaming subscription paradigm
+- [Bloomberg APIs Mktvwap API](https://apis.io/apis/bloomberg-apis/bloomberg-apis-mktvwap-api/) — Custom VWAP Service — streaming subscription
+- [Bloomberg APIs Pagedata API](https://apis.io/apis/bloomberg-apis/bloomberg-apis-pagedata-api/) — Page Data Service — GPGX page subscription
+- [Bloomberg APIs Tasvc API](https://apis.io/apis/bloomberg-apis/bloomberg-apis-tasvc-api/) — Technical Analysis Service — historical, intraday, and real-time studies
+- [Bloomberg APIs API Auth API](https://apis.io/apis/bloomberg-apis/bloomberg-apis-api-auth-api/) — API Authorization Service — entitlements and identity
+- [Bloomberg APIs Ref Data API](https://apis.io/apis/bloomberg-apis/bloomberg-apis-ref-data-api/) — Reference Data Service operations — request/response paradigm
 
-## Timestamps
+### Published properties
 
-- **Created:** 2024-01-01
-- **Modified:** 2026-05-19
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### Agentic access (1)
 
-### Bloomberg Market Data Feed
+Which operations an agent can call, which act, and which need a human in the loop.
 
-Real-time and historical market data for equities, fixed income, commodities, and currencies.
+- [Bloomberg Apis Agentic Access](https://apis.io/agentic-access/bloomberg-apis/bloomberg-apis-agentic-access/)
 
-- **Human URL:** [https://www.bloomberg.com/professional/support/api-library/](https://www.bloomberg.com/professional/support/api-library/)
+#### Collections (10)
 
-#### Tags
+Postman and Open Collection request collections.
 
-- Equities
-- Fixed Income
-- Market Data
-- Real-Time
+- [Bloomberg API (BLPAPI) apiauth API](https://apis.io/collections/bloomberg-apis/open-bloomberg-apis-apiauth-api/)
+- [Bloomberg API (BLPAPI) apiauth apiflds API](https://apis.io/collections/bloomberg-apis/open-bloomberg-apis-apiflds-api/)
+- [Bloomberg API (BLPAPI) apiauth instruments API](https://apis.io/collections/bloomberg-apis/open-bloomberg-apis-instruments-api/)
+- [Bloomberg API (BLPAPI) apiauth mktbar API](https://apis.io/collections/bloomberg-apis/open-bloomberg-apis-mktbar-api/)
+- [Bloomberg API (BLPAPI) apiauth mktdata API](https://apis.io/collections/bloomberg-apis/open-bloomberg-apis-mktdata-api/)
+- [Bloomberg API (BLPAPI) apiauth mktvwap API](https://apis.io/collections/bloomberg-apis/open-bloomberg-apis-mktvwap-api/)
+- [Bloomberg API (BLPAPI) apiauth pagedata API](https://apis.io/collections/bloomberg-apis/open-bloomberg-apis-pagedata-api/)
+- [Bloomberg API (BLPAPI) apiauth refdata API](https://apis.io/collections/bloomberg-apis/open-bloomberg-apis-refdata-api/)
+- [Bloomberg API (BLPAPI) apiauth tasvc API](https://apis.io/collections/bloomberg-apis/open-bloomberg-apis-tasvc-api/)
+- [Bloomberg API (BLPAPI)](https://apis.io/collections/bloomberg-apis/open-bloomberg-blpapi/)
 
-#### Properties
+#### Security (3)
 
-- [Documentation](https://www.bloomberg.com/professional/support/api-library/)
-- [Postman Collection](collections/bloomberg-blpapi.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/bloomberg-blpapi.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Authentication, trust centre, and vulnerability disclosure.
 
-### Bloomberg News API
+- [Bloomberg Apis Authentication](https://apis.io/security/bloomberg-apis/bloomberg-apis-authentication/)
+- [Bloomberg Apis Domain Security](https://apis.io/security/bloomberg-apis/bloomberg-apis-domain-security/)
+- [Bloomberg Apis Vulnerability Disclosure](https://apis.io/security/bloomberg-apis/bloomberg-apis-vulnerability-disclosure/)
 
-Access to Bloomberg's global news content, including articles, videos, and multimedia.
+#### Plans and pricing (1)
 
-- **Human URL:** [https://www.bloomberg.com/professional/product/news-data-feeds/](https://www.bloomberg.com/professional/product/news-data-feeds/)
+Published plans, tiers and prices.
 
-#### Tags
+- [Bloomberg Apis Plans Pricing](https://apis.io/plans/bloomberg-apis/bloomberg-apis-plans-pricing/)
 
-- Articles
-- Content
-- Media
-- News
+#### Rate limits (1)
 
-#### Properties
+Published request limits.
 
-- [Documentation](https://www.bloomberg.com/professional/product/news-data-feeds/)
-- [Postman Collection](collections/bloomberg-blpapi.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/bloomberg-blpapi.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Bloomberg Apis Rate Limits](https://apis.io/rate-limits/bloomberg-apis/bloomberg-apis-rate-limits/)
 
-### Bloomberg Data License API
+#### FinOps (1)
 
-Bulk data delivery service for historical and reference data.
+What the API costs to run, by operation.
 
-- **Human URL:** [https://www.bloomberg.com/professional/products/data/data-management/data-license/](https://www.bloomberg.com/professional/products/data/data-management/data-license/)
+- [Bloomberg Apis Finops](https://apis.io/finops/bloomberg-apis/bloomberg-apis-finops/)
 
-#### Tags
+## Where to find this API
 
-- Bulk Data
-- Enterprise
-- Historical Data
-- Reference Data
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-#### Properties
-
-- [Documentation](https://www.bloomberg.com/professional/products/data/data-management/data-license/)
-- [Postman Collection](collections/bloomberg-blpapi.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/bloomberg-blpapi.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [Portal](https://developer.bloomberg.com/)
-- [Getting Started](https://www.bloomberg.com/professional/support/api-library/)
-- [Terms of Service](https://www.bloomberg.com/notices/tos/)
-- [Privacy Policy](https://www.bloomberg.com/notices/privacy/)
+- [Website](https://bloomberg.com)
+- [Getting started](https://www.bloomberg.com/professional/support/api-library/)
 - [Support](https://www.bloomberg.com/professional/support/)
+- [Terms of service](https://www.bloomberg.com/notices/tos/)
+- [Privacy policy](https://www.bloomberg.com/notices/privacy/)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 33.3** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 48.2 |
+| Contract quality | 45.9 |
+| Contract governance | 0.0 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 47.6 |
+| Access clarity | 28.9 |
+
+**Agent readiness 17.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 29.6** — Securities & Market Data
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/bloomberg-apis/](https://apis.io/providers/bloomberg-apis/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Bloomberg APIs: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/bloomberg-apis/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
